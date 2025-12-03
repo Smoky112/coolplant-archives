@@ -47,12 +47,17 @@ const Index = () => {
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-4">
+              <div className="flex flex-wrap gap-2 mt-4">
                 <Link to="/servizi">
                   <RetroButton>Scopri i Servizi →</RetroButton>
                 </Link>
                 <Link to="/contatti">
                   <RetroButton>Richiedi Info</RetroButton>
+                </Link>
+                <Link to="/terminal">
+                  <RetroButton className="bg-[hsl(220,30%,15%)] text-[hsl(120,100%,65%)] border-[hsl(120,50%,30%)]">
+                    💻 Accedi al Terminale
+                  </RetroButton>
                 </Link>
               </div>
             </div>

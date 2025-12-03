@@ -8,6 +8,7 @@ const RetroHeader = () => {
     { path: "/", label: "Home" },
     { path: "/servizi", label: "Cosa Facciamo" },
     { path: "/news", label: "News" },
+    { path: "/terminal", label: "Terminal" },
     { path: "/contatti", label: "Contattaci" },
     { path: "/login", label: "Area Riservata" },
   ];
