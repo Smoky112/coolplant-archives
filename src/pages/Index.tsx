@@ -1,4 +1,4 @@
-import { Shield, Lock, Database, Server, Eye, FileCheck, AlertTriangle, CheckCircle } from "lucide-react";
+import { Shield, Lock, Database, Server, Eye, FileCheck, AlertTriangle, CheckCircle, XCircle, AlertOctagon } from "lucide-react";
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
@@ -59,7 +59,7 @@ const Index = () => {
           </RetroPanel>
         </div>
 
-        {/* Side panel */}
+        {/* Side panel - CORRUPTED STATUS */}
         <div className="space-y-4">
           <RetroPanel header="Stato Sistemi">
             <div className="space-y-2 text-[10px]">
@@ -68,47 +68,71 @@ const Index = () => {
                   <Server className="w-3 h-3" />
                   Server Farm
                 </span>
-                <span className="text-[hsl(var(--status-online))] font-bold">● ONLINE</span>
+                <span className="text-[hsl(var(--status-danger))] font-bold blink">● OFFLINE</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Eye className="w-3 h-3" />
                   SOC Monitor
                 </span>
-                <span className="text-[hsl(var(--status-online))] font-bold">● ATTIVO</span>
+                <span className="text-[hsl(var(--status-warning))] font-bold">● DEGRADATO</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Shield className="w-3 h-3" />
                   Firewall
                 </span>
-                <span className="text-[hsl(var(--status-online))] font-bold">● ONLINE</span>
+                <span className="text-[hsl(var(--status-danger))] font-bold">● BREACH</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Database className="w-3 h-3" />
                   Backup
                 </span>
-                <span className="text-[hsl(var(--status-online))] font-bold">● OK</span>
+                <span className="text-[hsl(var(--status-corrupt))] font-bold">● CORROTTO</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-1">
+                  <Lock className="w-3 h-3" />
+                  Auth Server
+                </span>
+                <span className="text-muted-foreground font-bold">● N/D</span>
               </div>
               <hr className="border-border my-2" />
               <p className="text-center text-muted-foreground">
-                Ultimo aggiornamento: 24/12/2001 08:30
+                Ultimo aggiornamento: 24/12/2001 <span className="text-[hsl(var(--status-danger))]">07:45</span>
+              </p>
+              <p className="text-center text-[9px] text-[hsl(var(--status-corrupt))]">
+                [ERRORE: Connessione interrotta]
               </p>
             </div>
           </RetroPanel>
 
-          <RetroPanel header="⚠️ Alert Sicurezza">
+          <RetroPanel header="⚠️ ALERT CRITICO">
             <div className="space-y-2 text-[10px]">
+              <div className="flex items-start gap-1 p-1 bg-destructive/10 border border-destructive/30">
+                <AlertOctagon className="w-3 h-3 text-destructive mt-0.5 blink" />
+                <div>
+                  <p className="font-bold text-destructive">INTRUSIONE RILEVATA</p>
+                  <p className="text-muted-foreground">Piano 15 - Ufficio CEO</p>
+                </div>
+              </div>
               <div className="flex items-start gap-1 p-1 bg-muted">
                 <AlertTriangle className="w-3 h-3 text-[hsl(var(--status-warning))] mt-0.5" />
                 <div>
-                  <p className="font-bold">Nuovo virus: NIMDA</p>
-                  <p className="text-muted-foreground">Patch disponibile</p>
+                  <p className="font-bold">Virus: CODE RED II</p>
+                  <p className="text-muted-foreground">3 sistemi infetti</p>
                 </div>
               </div>
-              <p className="text-muted-foreground text-center">
-                Livello minaccia: <span className="text-[hsl(var(--status-warning))] font-bold">MEDIO</span>
+              <div className="flex items-start gap-1 p-1 bg-muted">
+                <XCircle className="w-3 h-3 text-[hsl(var(--status-corrupt))] mt-0.5" />
+                <div>
+                  <p className="font-bold">File EDEN.DAT</p>
+                  <p className="text-muted-foreground text-[9px]">CRC Error - Dati non recuperabili</p>
+                </div>
+              </div>
+              <p className="text-center text-[hsl(var(--status-danger))] font-bold">
+                Livello minaccia: <span className="blink">CRITICO</span>
               </p>
             </div>
           </RetroPanel>
@@ -161,6 +185,16 @@ const Index = () => {
             </thead>
             <tbody>
               <tr>
+                <td>24/12/2001</td>
+                <td className="text-[hsl(var(--status-danger))]">
+                  <span className="blink">●</span> <a href="#" className="text-[hsl(var(--status-danger))]">[URGENTE] Incidente sicurezza Piano 15</a>
+                </td>
+              </tr>
+              <tr>
+                <td>23/12/2001</td>
+                <td><a href="#">Backup natalizio completato</a> <span className="text-[hsl(var(--status-corrupt))] text-[9px]">[CORROTTO]</span></td>
+              </tr>
+              <tr>
                 <td>20/12/2001</td>
                 <td><a href="#">Nuovo Data Center Tier IV operativo</a></td>
               </tr>
@@ -171,10 +205,6 @@ const Index = () => {
               <tr>
                 <td>10/12/2001</td>
                 <td><a href="#">Certificazione ISO 27001 ottenuta</a></td>
-              </tr>
-              <tr>
-                <td>01/12/2001</td>
-                <td><a href="#">Apertura SOC piano -1</a></td>
               </tr>
             </tbody>
           </table>
@@ -198,8 +228,12 @@ const Index = () => {
             </p>
             <div className="retro-panel-inset p-2 mt-2">
               <p className="text-[10px]">
-                <strong>Dipendenti:</strong> 150+ | <strong>Clienti:</strong> 500+ | <strong>Uptime:</strong> 99.99%
+                <strong>Dipendenti:</strong> 150+ | <strong>Clienti:</strong> 500+ | <strong>Uptime:</strong> <span className="line-through text-muted-foreground">99.99%</span> <span className="text-[hsl(var(--status-danger))]">N/D</span>
               </p>
+            </div>
+            <div className="retro-panel-inset p-2 bg-muted/50 text-[9px] text-muted-foreground">
+              <p>⚠️ Nota: Alcuni servizi potrebbero essere temporaneamente non disponibili.</p>
+              <p>Ultimo report disponibile: 23/12/2001</p>
             </div>
             <Link to="/servizi">
               <RetroButton size="sm" className="mt-2">Scopri di più →</RetroButton>
@@ -207,6 +241,23 @@ const Index = () => {
           </div>
         </RetroPanel>
       </div>
+
+      {/* System Log Preview */}
+      <RetroPanel header="📋 Log di Sistema [Ultimi Eventi]" className="mt-4">
+        <div className="retro-panel-inset p-2 font-mono text-[9px] bg-foreground/5 max-h-32 overflow-y-auto">
+          <p className="text-muted-foreground">[24/12/2001 07:45:23] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> Accesso non autorizzato - Piano 15</p>
+          <p className="text-muted-foreground">[24/12/2001 07:44:58] <span className="text-[hsl(var(--status-warning))]">WARNING:</span> Tentativo login fallito - user: admin</p>
+          <p className="text-muted-foreground">[24/12/2001 07:30:12] <span className="text-[hsl(var(--status-corrupt))]">ERROR:</span> File EDEN_BACKUP.DAT - Checksum non valido</p>
+          <p className="text-muted-foreground">[24/12/2001 07:15:00] <span className="text-[hsl(var(--status-online))]">INFO:</span> Scheduled task: Morning_Check eseguito</p>
+          <p className="text-muted-foreground">[24/12/2001 03:22:41] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> IDS Alert - Possibile intrusione rilevata</p>
+          <p className="text-muted-foreground">[24/12/2001 02:00:00] <span className="text-[hsl(var(--status-corrupt))]">ERROR:</span> Backup notturno fallito - Settore disco corrotto</p>
+          <p className="text-muted-foreground">[23/12/2001 23:59:59] <span className="text-[hsl(var(--status-online))]">INFO:</span> Ultimo backup valido completato</p>
+          <p className="text-muted-foreground">[23/12/2001 18:30:00] <span className="text-[hsl(var(--status-online))]">INFO:</span> D.Bellapianta logged in - Piano 15</p>
+        </div>
+        <p className="text-[9px] text-muted-foreground mt-1 text-right">
+          Log troncato - <a href="#" className="text-primary">Accedi per visualizzare log completo</a>
+        </p>
+      </RetroPanel>
     </RetroLayout>
   );
 };
