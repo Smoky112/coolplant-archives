@@ -10,6 +10,7 @@ const RetroHeader = () => {
     { path: "/news", label: "News" },
     { path: "/terminal", label: "Terminal" },
     { path: "/contatti", label: "Contattaci" },
+    { path: "/dipendenti", label: "Dipendenti" },  // ← Aggiunto
     { path: "/login", label: "Area Riservata" },
   ];
 
