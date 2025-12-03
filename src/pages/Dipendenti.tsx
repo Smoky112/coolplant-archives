@@ -309,7 +309,7 @@ const Team = () => {
               <span className="blink">●</span> Il CEO Davide Bellapianta risulta non raggiungibile dalle ore 07:45 del 24/12/2001.
             </p>
             <p className="text-muted-foreground text-[9px]">
-              Per emergenze contattare il SOC: Interno 0100
+              Per emergenze contattare il SOC: Interno 0101
             </p>
           </div>
         </RetroPanel>
