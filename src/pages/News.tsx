@@ -1,18 +1,19 @@
 import { useState } from "react";
-import { Calendar, User, Tag, ExternalLink, X } from "lucide-react";
+import { Calendar, User, Tag, ExternalLink, X, Mail, Check } from "lucide-react";
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 interface NewsItem {
   id: number;
   date: string;
+  month: string;
   title: string;
   author: string;
   category: string;
@@ -23,11 +24,17 @@ interface NewsItem {
 
 const News = () => {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState("Tutti");
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const itemsPerPage = 3;
 
   const newsItems: NewsItem[] = [
     {
       id: 1,
       date: "20/12/2001",
+      month: "Dicembre 2001",
       title: "Nuovo Data Center Tier IV operativo",
       author: "Ufficio Stampa",
       category: "Infrastruttura",
@@ -54,6 +61,7 @@ Il Data Center è stato progettato secondo le più rigorose normative internazio
     {
       id: 2,
       date: "15/12/2001",
+      month: "Dicembre 2001",
       title: "Partnership strategica con Cisco Systems",
       author: "Marketing",
       category: "Partnership",
@@ -80,6 +88,7 @@ Per maggiori informazioni contattare: partnership@coolplant.it`,
     {
       id: 3,
       date: "10/12/2001",
+      month: "Dicembre 2001",
       title: "Certificazione ISO 27001 conseguita",
       author: "Quality Assurance",
       category: "Certificazioni",
@@ -109,7 +118,8 @@ PROSSIMI OBIETTIVI:
     },
     {
       id: 4,
-      date: "01/12/2001",
+      date: "05/12/2001",
+      month: "Dicembre 2001",
       title: "SOC Piano -1: operatività full 24/7",
       author: "IT Operations",
       category: "Servizi",
@@ -145,6 +155,7 @@ NOTA: Il SOC è collegato direttamente all'ufficio del CEO al Piano 15 tramite l
     {
       id: 5,
       date: "20/11/2001",
+      month: "Novembre 2001",
       title: "Nuovo servizio di Threat Intelligence",
       author: "R&D",
       category: "Servizi",
@@ -178,6 +189,7 @@ Costo servizio: da 2.500.000 Lire/mese per PMI`,
     {
       id: 6,
       date: "15/11/2001",
+      month: "Novembre 2001",
       title: "Aggiornamento piattaforma DLP",
       author: "Product Team",
       category: "Prodotti",
@@ -212,6 +224,7 @@ SUPPORTO: Per assistenza tecnica contattare support@coolplant.it o chiamare il n
     {
       id: 7,
       date: "01/11/2001",
+      month: "Novembre 2001",
       title: "Seminario sulla sicurezza informatica",
       author: "Formazione",
       category: "Eventi",
@@ -244,9 +257,185 @@ Il prossimo seminario è previsto per febbraio 2002 con focus su "Compliance e n
 Foto dell'evento disponibili su: http://intranet.coolplant.local/gallery/sem_nov2001`,
       highlight: false,
     },
+    {
+      id: 8,
+      date: "25/10/2001",
+      month: "Ottobre 2001",
+      title: "Apertura nuova sede operativa Milano",
+      author: "Ufficio Stampa",
+      category: "Infrastruttura",
+      content: "CoolPlant espande la propria presenza con una nuova sede operativa a Milano, in zona Porta Nuova.",
+      fullContent: `CoolPlant Corporation espande la propria presenza con una nuova sede operativa a Milano, in zona Porta Nuova.
+
+DETTAGLI SEDE MILANO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Indirizzo: Via Melchiorre Gioia 45, 20124 Milano
+• Superficie: 400 mq open space
+• Personale: 12 consulenti senior
+• Servizi: Consulenza, Pre-sales, Account Management
+
+La sede milanese permetterà di servire meglio i clienti del Nord Italia e di rafforzare la nostra presenza nel mercato enterprise lombardo.
+
+Inaugurazione ufficiale prevista per il 10 novembre 2001.`,
+      highlight: false,
+    },
+    {
+      id: 9,
+      date: "15/10/2001",
+      month: "Ottobre 2001",
+      title: "Nuovo contratto con Banca Popolare di Brescia",
+      author: "Sales",
+      category: "Partnership",
+      content: "Firmato importante contratto pluriennale con Banca Popolare di Brescia per servizi di sicurezza gestita.",
+      fullContent: `Firmato importante contratto pluriennale con Banca Popolare di Brescia per servizi di sicurezza gestita.
+
+SCOPE DEL CONTRATTO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Monitoraggio SOC 24/7 per tutte le filiali
+• Vulnerability Assessment trimestrale
+• Penetration Testing annuale
+• Formazione personale IT bancario
+• Incident Response con SLA garantito
+
+Valore contratto: 1.2 miliardi di lire su 3 anni.
+
+"Siamo orgogliosi di questa partnership che conferma la fiducia del settore bancario nei nostri servizi" - Davide Bellapianta, CEO`,
+      highlight: false,
+    },
+    {
+      id: 10,
+      date: "01/10/2001",
+      month: "Ottobre 2001",
+      title: "Rilascio CoolGuard Enterprise 2.0",
+      author: "Product Team",
+      category: "Prodotti",
+      content: "Disponibile la nuova versione del nostro prodotto di punta per la protezione endpoint.",
+      fullContent: `Disponibile la nuova versione del nostro prodotto di punta per la protezione endpoint: CoolGuard Enterprise 2.0.
+
+NUOVE FUNZIONALITÀ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Protezione real-time contro virus e worm
+• Firewall personale integrato
+• Content filtering per navigazione web
+• Console centralizzata web-based
+• Supporto Windows XP (beta)
+
+Upgrade gratuito per tutti i clienti con contratto di manutenzione attivo.
+
+Download disponibile su: ftp.coolplant.it/products/coolguard20`,
+      highlight: false,
+    },
+    {
+      id: 11,
+      date: "20/09/2001",
+      month: "Settembre 2001",
+      title: "Attivato servizio di Disaster Recovery",
+      author: "IT Operations",
+      category: "Servizi",
+      content: "Nuovo servizio di Disaster Recovery as a Service per garantire la continuità operativa dei clienti.",
+      fullContent: `Nuovo servizio di Disaster Recovery as a Service per garantire la continuità operativa dei clienti enterprise.
+
+CARATTERISTICHE DEL SERVIZIO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• RPO (Recovery Point Objective): 15 minuti
+• RTO (Recovery Time Objective): 4 ore
+• Replica dati su Data Center secondario
+• Test di failover semestrale incluso
+• Documentazione procedure disaster recovery
+
+Il servizio utilizza tecnologia di replica sincrona su fibra ottica dedicata verso il nostro sito di DR situato a Verona.
+
+Costo: a partire da 5.000.000 Lire/mese`,
+      highlight: false,
+    },
+    {
+      id: 12,
+      date: "05/09/2001",
+      month: "Settembre 2001",
+      title: "CoolPlant al Security Summit Roma",
+      author: "Marketing",
+      category: "Eventi",
+      content: "Grande successo per CoolPlant al Security Summit di Roma con oltre 500 visitatori allo stand.",
+      fullContent: `Grande successo per CoolPlant Corporation al Security Summit di Roma (3-5 settembre 2001).
+
+HIGHLIGHTS DELL'EVENTO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Oltre 500 visitatori allo stand CoolPlant
+• 45 demo prodotto effettuate
+• 120 lead qualificati raccolti
+• Speech del CEO su "Il futuro della Data Protection"
+
+Il CEO Davide Bellapianta ha tenuto un keynote molto apprezzato sulla visione strategica della sicurezza informatica per il decennio 2000-2010.
+
+"L'Italia deve investire di più in sicurezza informatica. Il gap con gli altri paesi europei è ancora significativo." - D. Bellapianta
+
+Prossimo evento: Smau Milano, 18-22 ottobre 2001`,
+      highlight: false,
+    },
   ];
 
   const categories = ["Tutti", "Infrastruttura", "Partnership", "Certificazioni", "Servizi", "Prodotti", "Eventi"];
+  
+  const archives = [
+    { month: "Dicembre 2001", count: 4 },
+    { month: "Novembre 2001", count: 3 },
+    { month: "Ottobre 2001", count: 3 },
+    { month: "Settembre 2001", count: 2 },
+  ];
+
+  const usefulLinks = [
+    { name: "CERT-IT", url: "https://www.cert.it" },
+    { name: "Garante Privacy", url: "https://www.garanteprivacy.it" },
+    { name: "CLUSIT", url: "https://www.clusit.it" },
+    { name: "Microsoft Security", url: "https://www.microsoft.com/security" },
+  ];
+
+  // Filter news
+  const filteredNews = newsItems.filter((news) => {
+    const categoryMatch = selectedCategory === "Tutti" || news.category === selectedCategory;
+    const monthMatch = !selectedMonth || news.month === selectedMonth;
+    return categoryMatch && monthMatch;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedNews = filteredNews.slice(startIndex, startIndex + itemsPerPage);
+
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category);
+    setSelectedMonth(null);
+    setCurrentPage(1);
+  };
+
+  const handleArchiveClick = (month: string) => {
+    setSelectedMonth(month === selectedMonth ? null : month);
+    setSelectedCategory("Tutti");
+    setCurrentPage(1);
+  };
+
+  const handleNewsletterSubmit = () => {
+    if (!email || !email.includes("@")) {
+      toast.error("Inserisci un indirizzo email valido");
+      return;
+    }
+    toast.success("Iscrizione completata!", {
+      description: `Email ${email} registrata con successo.`,
+    });
+    setEmail("");
+  };
+
+  const handleLinkClick = (url: string, name: string) => {
+    toast.info(`Collegamento a ${name}`, {
+      description: "[ERRORE 404: Server non raggiungibile - 24/12/2001]",
+    });
+  };
+
+  const resetFilters = () => {
+    setSelectedCategory("Tutti");
+    setSelectedMonth(null);
+    setCurrentPage(1);
+  };
 
   return (
     <RetroLayout>
@@ -254,53 +443,107 @@ Foto dell'evento disponibili su: http://intranet.coolplant.local/gallery/sem_nov
         {/* Main content */}
         <div className="md:col-span-3">
           <RetroPanel header="📰 News & Comunicati Stampa">
-            <div className="space-y-4">
-              {newsItems.map((news) => (
-                <article
-                  key={news.id}
-                  className={`retro-panel ${news.highlight ? "border-primary" : ""}`}
+            {/* Active filters */}
+            {(selectedCategory !== "Tutti" || selectedMonth) && (
+              <div className="mb-3 p-2 bg-muted border border-border text-[10px]">
+                <span className="text-muted-foreground">Filtri attivi: </span>
+                {selectedCategory !== "Tutti" && (
+                  <span className="bg-primary text-primary-foreground px-2 py-0.5 mr-2">
+                    {selectedCategory}
+                  </span>
+                )}
+                {selectedMonth && (
+                  <span className="bg-primary text-primary-foreground px-2 py-0.5 mr-2">
+                    {selectedMonth}
+                  </span>
+                )}
+                <button 
+                  onClick={resetFilters}
+                  className="text-primary hover:underline ml-2"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-1">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {news.date}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <User className="w-3 h-3" />
-                          {news.author}
-                        </span>
-                        <span className="flex items-center gap-1 bg-muted px-2 py-0.5">
-                          <Tag className="w-3 h-3" />
-                          {news.category}
-                        </span>
-                      </div>
-                      <h2 className="font-bold text-[12px] text-primary mb-2">
-                        {news.highlight && <span className="text-destructive blink">★ </span>}
-                        {news.title}
-                      </h2>
-                      <p className="text-[11px] text-muted-foreground leading-relaxed">
-                        {news.content}
-                      </p>
-                      <div className="mt-2">
-                        <RetroButton size="sm" onClick={() => setSelectedNews(news)}>
-                          Leggi tutto <ExternalLink className="w-3 h-3 inline ml-1" />
-                        </RetroButton>
+                  [Rimuovi filtri]
+                </button>
+              </div>
+            )}
+
+            <div className="space-y-4">
+              {paginatedNews.length > 0 ? (
+                paginatedNews.map((news) => (
+                  <article
+                    key={news.id}
+                    className={`retro-panel ${news.highlight ? "border-primary" : ""}`}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 text-[10px] text-muted-foreground mb-1">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {news.date}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <User className="w-3 h-3" />
+                            {news.author}
+                          </span>
+                          <span className="flex items-center gap-1 bg-muted px-2 py-0.5">
+                            <Tag className="w-3 h-3" />
+                            {news.category}
+                          </span>
+                        </div>
+                        <h2 className="font-bold text-[12px] text-primary mb-2">
+                          {news.highlight && <span className="text-destructive blink">★ </span>}
+                          {news.title}
+                        </h2>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed">
+                          {news.content}
+                        </p>
+                        <div className="mt-2">
+                          <RetroButton size="sm" onClick={() => setSelectedNews(news)}>
+                            Leggi tutto <ExternalLink className="w-3 h-3 inline ml-1" />
+                          </RetroButton>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </article>
-              ))}
+                  </article>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground text-[11px]">
+                  Nessuna news trovata per i filtri selezionati.
+                </div>
+              )}
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center gap-1 mt-4">
-              <RetroButton size="sm" disabled>« Prec</RetroButton>
-              <RetroButton size="sm" className="bg-primary text-primary-foreground">1</RetroButton>
-              <RetroButton size="sm">2</RetroButton>
-              <RetroButton size="sm">3</RetroButton>
-              <RetroButton size="sm">Succ »</RetroButton>
+            {totalPages > 1 && (
+              <div className="flex justify-center gap-1 mt-4">
+                <RetroButton 
+                  size="sm" 
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                >
+                  « Prec
+                </RetroButton>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <RetroButton
+                    key={page}
+                    size="sm"
+                    className={currentPage === page ? "bg-primary text-primary-foreground" : ""}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </RetroButton>
+                ))}
+                <RetroButton 
+                  size="sm" 
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                >
+                  Succ »
+                </RetroButton>
+              </div>
+            )}
+
+            <div className="text-[9px] text-muted-foreground text-center mt-2">
+              Pagina {currentPage} di {totalPages || 1} • {filteredNews.length} articoli totali
             </div>
           </RetroPanel>
         </div>
@@ -310,62 +553,73 @@ Foto dell'evento disponibili su: http://intranet.coolplant.local/gallery/sem_nov
           <RetroPanel header="Categorie">
             <div className="space-y-1">
               {categories.map((cat) => (
-                <a
+                <button
                   key={cat}
-                  href="#"
-                  className="block text-[11px] p-1 hover:bg-muted no-underline text-foreground hover:text-primary"
+                  onClick={() => handleCategoryClick(cat)}
+                  className={`block w-full text-left text-[11px] p-1 hover:bg-muted no-underline transition-colors ${
+                    selectedCategory === cat 
+                      ? "bg-primary text-primary-foreground" 
+                      : "text-foreground hover:text-primary"
+                  }`}
                 >
                   → {cat}
-                </a>
+                </button>
               ))}
             </div>
           </RetroPanel>
 
           <RetroPanel header="Archivio">
             <div className="space-y-1 text-[11px]">
-              <a href="#" className="block p-1 hover:bg-muted no-underline text-foreground hover:text-primary">
-                → Dicembre 2001 (4)
-              </a>
-              <a href="#" className="block p-1 hover:bg-muted no-underline text-foreground hover:text-primary">
-                → Novembre 2001 (3)
-              </a>
-              <a href="#" className="block p-1 hover:bg-muted no-underline text-foreground hover:text-primary">
-                → Ottobre 2001 (5)
-              </a>
-              <a href="#" className="block p-1 hover:bg-muted no-underline text-foreground hover:text-primary">
-                → Settembre 2001 (2)
-              </a>
+              {archives.map((archive) => (
+                <button
+                  key={archive.month}
+                  onClick={() => handleArchiveClick(archive.month)}
+                  className={`block w-full text-left p-1 hover:bg-muted no-underline transition-colors ${
+                    selectedMonth === archive.month 
+                      ? "bg-primary text-primary-foreground" 
+                      : "text-foreground hover:text-primary"
+                  }`}
+                >
+                  → {archive.month} ({archive.count})
+                </button>
+              ))}
             </div>
           </RetroPanel>
 
           <RetroPanel header="Newsletter">
             <div className="text-[11px] space-y-2">
               <p>Iscriviti alla nostra newsletter per ricevere le ultime news sulla sicurezza.</p>
-              <input
-                type="email"
-                placeholder="La tua email..."
-                className="retro-input w-full"
-              />
-              <RetroButton size="sm" className="w-full">
-                Iscriviti
+              <div className="flex items-center gap-1">
+                <Mail className="w-3 h-3 text-muted-foreground" />
+                <input
+                  type="email"
+                  placeholder="La tua email..."
+                  className="retro-input w-full"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleNewsletterSubmit()}
+                />
+              </div>
+              <RetroButton size="sm" className="w-full" onClick={handleNewsletterSubmit}>
+                <Check className="w-3 h-3 mr-1" /> Iscriviti
               </RetroButton>
+              <p className="text-[9px] text-muted-foreground">
+                [SERVIZIO SOSPESO DAL 24/12/2001]
+              </p>
             </div>
           </RetroPanel>
 
           <RetroPanel header="Link Utili">
             <div className="space-y-1 text-[11px]">
-              <a href="#" className="block p-1 hover:bg-muted">
-                → CERT-IT
-              </a>
-              <a href="#" className="block p-1 hover:bg-muted">
-                → Garante Privacy
-              </a>
-              <a href="#" className="block p-1 hover:bg-muted">
-                → CLUSIT
-              </a>
-              <a href="#" className="block p-1 hover:bg-muted">
-                → Microsoft Security
-              </a>
+              {usefulLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => handleLinkClick(link.url, link.name)}
+                  className="block w-full text-left p-1 hover:bg-muted text-foreground hover:text-primary transition-colors"
+                >
+                  → {link.name}
+                </button>
+              ))}
             </div>
           </RetroPanel>
         </div>
