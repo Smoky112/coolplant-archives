@@ -18,7 +18,15 @@ interface FileSystem {
 const fileSystem: FileSystem = {
   "/": {
     type: "dir",
-    children: ["BACKUP", "LOGS", "EDEN", "MAIL", "DOCUMENTI", "SISTEMA.INI", "LEGGIMI.TXT"],
+    children: [
+      "BACKUP",
+      "LOGS",
+      "EDEN",
+      "MAIL",
+      "DOCUMENTI",
+      "SISTEMA.INI",
+      "LEGGIMI.TXT",
+    ],
   },
   "/LEGGIMI.TXT": {
     type: "file",
@@ -468,10 +476,12 @@ const Terminal = () => {
             const isDir = entry?.type === "dir";
             const isCorrupt = entry?.corrupted;
             const isRestricted = entry?.restricted;
-            const marker = isCorrupt ? " [CORROTTO]" : isRestricted ? " [BLOCCATO]" : "";
-            addToHistory([
-              `${isDir ? "<DIR>" : "     "}  ${item}${marker}`,
-            ]);
+            const marker = isCorrupt
+              ? " [CORROTTO]"
+              : isRestricted
+              ? " [BLOCCATO]"
+              : "";
+            addToHistory([`${isDir ? "<DIR>" : "     "}  ${item}${marker}`]);
           });
           addToHistory(["", `       ${currentDir.children.length} file`, ""]);
         }
@@ -535,7 +545,10 @@ const Terminal = () => {
           const file = fileSystem[filePath];
           if (file && file.type === "file") {
             if (file.downloadable) {
-              downloadFile(args.replace(/\//g, "_") + ".txt", file.content || "");
+              downloadFile(
+                args.replace(/\//g, "_") + ".txt",
+                file.content || ""
+              );
               addToHistory([
                 `Download avviato: ${args}`,
                 "File salvato nella cartella download del browser.",
@@ -621,6 +634,38 @@ const Terminal = () => {
         }, 2000);
         break;
 
+      case "6024857":
+        addToHistory([
+          "",
+          "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓",
+          "▓                                ▓",
+          "▓   CODICE SEGRETO RICONOSCIUTO   ▓",
+          "▓                                ▓",
+          "▓    Bravo! Hai trovato 6024857   ▓",
+          "▓                                ▓",
+          "▓   Tuttavia, nessun effetto      ▓",
+          "▓   speciale attivato...          ▓",
+          "▓                                ▓",
+          "▓   Richiedi un indizio quando    ▓",
+          "▓   vuoi! [wink]                  ▓",
+          "▓                                ▓",
+          "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓",
+          "",
+        ]);
+        break;
+      case "SAVE_ME":
+        addToHistory([
+          "Protocollo E*** riconosciuto.",
+          "Connessione in corso...",
+          "Chiave mancante richiesta al server remoto...",
+          "Ricalcolo.",
+          "Dati corrotti.",
+          "Ripristino non possibile",
+          "Connessione interrotta.",
+          "",
+        ]);
+        break;
+
       default:
         if (cmd.trim()) {
           addToHistory([
@@ -646,18 +691,22 @@ const Terminal = () => {
 
   return (
     <RetroLayout>
-      <RetroPanel header="💻 Terminal Legacy - CoolPlant Server" className="mb-4">
+      <RetroPanel
+        header="💻 Terminal Legacy - CoolPlant Server"
+        className="mb-4"
+      >
         <div className="text-[10px] mb-2 text-muted-foreground">
-          Connesso a: COOLPLANT-SRV01 | Stato: DEGRADATO | Data Sistema: 24/12/2001
+          Connesso a: COOLPLANT-SRV01 | Stato: DEGRADATO | Data Sistema:
+          24/12/2001
         </div>
-        
+
         <div
           ref={terminalRef}
           onClick={handleTerminalClick}
           className="bg-[hsl(220,30%,8%)] text-[hsl(120,100%,65%)] font-mono text-[11px] p-4 h-[400px] overflow-y-auto cursor-text border-4 border-[hsl(220,10%,25%)]"
-          style={{ 
+          style={{
             textShadow: "0 0 5px hsl(120 100% 50% / 0.5)",
-            fontFamily: "'Courier New', 'Lucida Console', monospace"
+            fontFamily: "'Courier New', 'Lucida Console', monospace",
           }}
         >
           {history.map((line, i) => (
@@ -665,7 +714,7 @@ const Terminal = () => {
               {line || "\u00A0"}
             </div>
           ))}
-          
+
           <form onSubmit={handleSubmit} className="flex">
             <span>C:{currentPath.replace(/\//g, "\\")}&gt; </span>
             <input
@@ -683,16 +732,36 @@ const Terminal = () => {
         </div>
 
         <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2">
-          <RetroButton size="sm" onClick={() => { executeCommand("help"); }}>
+          <RetroButton
+            size="sm"
+            onClick={() => {
+              executeCommand("help");
+            }}
+          >
             HELP
           </RetroButton>
-          <RetroButton size="sm" onClick={() => { executeCommand("dir"); }}>
+          <RetroButton
+            size="sm"
+            onClick={() => {
+              executeCommand("dir");
+            }}
+          >
             DIR
           </RetroButton>
-          <RetroButton size="sm" onClick={() => { executeCommand("tree"); }}>
+          <RetroButton
+            size="sm"
+            onClick={() => {
+              executeCommand("tree");
+            }}
+          >
             TREE
           </RetroButton>
-          <RetroButton size="sm" onClick={() => { executeCommand("cls"); }}>
+          <RetroButton
+            size="sm"
+            onClick={() => {
+              executeCommand("cls");
+            }}
+          >
             CLS
           </RetroButton>
         </div>
@@ -702,7 +771,8 @@ const Terminal = () => {
         <RetroPanel header="📁 File Scaricabili">
           <div className="text-[10px] space-y-1">
             <p className="text-muted-foreground mb-2">
-              Alcuni file sono disponibili per il download. Usa il comando DOWNLOAD.
+              Alcuni file sono disponibili per il download. Usa il comando
+              DOWNLOAD.
             </p>
             <div className="retro-panel-inset p-2 space-y-1">
               <p>✓ LEGGIMI.TXT</p>
@@ -721,8 +791,8 @@ const Terminal = () => {
               ATTENZIONE: Questo sistema è rimasto inattivo dal 24/12/2001.
             </p>
             <p>
-              Alcuni file risultano corrotti o inaccessibili. 
-              La cartella EDEN richiede autorizzazione di Livello 5.
+              Alcuni file risultano corrotti o inaccessibili. La cartella EDEN
+              richiede autorizzazione di Livello 5.
             </p>
             <p className="text-muted-foreground">
               Per recuperare dati corrotti, contattare il supporto tecnico.

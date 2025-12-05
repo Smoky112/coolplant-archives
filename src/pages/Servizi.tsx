@@ -1,4 +1,15 @@
-import { Shield, Lock, Database, Server, Eye, FileCheck, Cpu, HardDrive, Network, AlertTriangle } from "lucide-react";
+import {
+  Shield,
+  Lock,
+  Database,
+  Server,
+  Eye,
+  FileCheck,
+  Cpu,
+  HardDrive,
+  Network,
+  AlertTriangle,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
@@ -6,12 +17,20 @@ import RetroButton from "@/components/RetroButton";
 import { Link } from "react-router-dom";
 
 // Componente per testo che cambia all'hover (effetto creepy semplice)
-const CreepyText = ({ text, creepyText }: { text: string, creepyText: string }) => {
+const CreepyText = ({
+  text,
+  creepyText,
+}: {
+  text: string;
+  creepyText: string;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
-    <span 
-      className={`transition-colors duration-75 cursor-help ${isHovered ? 'text-red-600 font-bold tracking-widest' : ''}`}
+    <span
+      className={`transition-colors duration-75 cursor-help ${
+        isHovered ? "text-red-600 font-bold tracking-widest" : ""
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -23,7 +42,9 @@ const CreepyText = ({ text, creepyText }: { text: string, creepyText: string }) 
 // Componente "GlitchTruth": Riempie l'intera pagina con "LA VERITÀ"
 const GlitchTruth = ({ text }: { text: string }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [truthElements, setTruthElements] = useState<Array<{id: number, x: number, y: number, rotation: number, size: number}>>([]);
+  const [truthElements, setTruthElements] = useState<
+    Array<{ id: number; x: number; y: number; rotation: number; size: number }>
+  >([]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -32,15 +53,17 @@ const GlitchTruth = ({ text }: { text: string }) => {
       let count = 0;
       interval = setInterval(() => {
         count++;
-        const newElements = Array.from({ length: Math.min(5, count) }).map((_, i) => ({
-          id: Date.now() + i,
-          x: Math.random() * 100, // % della larghezza schermo
-          y: Math.random() * 100, // % dell'altezza schermo
-          rotation: (Math.random() - 0.5) * 60,
-          size: 0.8 + Math.random() * 1.5 // tra 0.8rem e 2.3rem
-        }));
-        
-        setTruthElements(prev => {
+        const newElements = Array.from({ length: Math.min(5, count) }).map(
+          (_, i) => ({
+            id: Date.now() + i,
+            x: Math.random() * 100, // % della larghezza schermo
+            y: Math.random() * 100, // % dell'altezza schermo
+            rotation: (Math.random() - 0.5) * 60,
+            size: 0.8 + Math.random() * 1.5, // tra 0.8rem e 2.3rem
+          })
+        );
+
+        setTruthElements((prev) => {
           const updated = [...prev, ...newElements];
           // Limita a max 200 elementi per non crashare il browser
           return updated.slice(-200);
@@ -56,19 +79,21 @@ const GlitchTruth = ({ text }: { text: string }) => {
 
   return (
     <>
-      <span 
-        className={`relative inline-block cursor-crosshair transition-colors ${isHovered ? 'text-red-600 font-black animate-pulse' : ''}`}
+      <span
+        className={`relative inline-block cursor-crosshair transition-colors ${
+          isHovered ? "text-red-600 font-black animate-pulse" : ""
+        }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {text}
       </span>
-      
+
       {/* Overlay fullscreen con le scritte */}
       {isHovered && (
-        <div 
+        <div
           className="fixed inset-0 pointer-events-none z-[9998] overflow-hidden"
-          style={{ mixBlendMode: 'multiply' }}
+          style={{ mixBlendMode: "multiply" }}
         >
           {truthElements.map((el) => (
             <div
@@ -80,8 +105,8 @@ const GlitchTruth = ({ text }: { text: string }) => {
                 transform: `rotate(${el.rotation}deg)`,
                 fontSize: `${el.size}rem`,
                 opacity: 0.7,
-                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                animation: 'glitch 0.3s infinite'
+                textShadow: "2px 2px 4px rgba(0,0,0,0.8)",
+                animation: "glitch 0.3s infinite",
               }}
             >
               LA VERITÀ
@@ -89,7 +114,7 @@ const GlitchTruth = ({ text }: { text: string }) => {
           ))}
         </div>
       )}
-      
+
       {/* CSS per l'animazione glitch */}
       <style>{`
         @keyframes glitch {
@@ -107,55 +132,142 @@ const GlitchTruth = ({ text }: { text: string }) => {
 const Servizi = () => {
   // Dati aggiornati per la tabella PREZZI (Acrostico E-D-E-N)
   const pricingRows = [
-    { name: "Enterprise DLP Suite", type: "Licenza annuale", price: "€ 15.000/anno", note: "Per 100 endpoint" },
-    { name: "Database Recovery Plan", type: "Servizio mensile", price: "€ 2.500/mese", note: "24/7 incluso" },
-    { name: "External Vulnerability Scan", type: "Una tantum", price: "€ 8.000", note: "Include report" },
-    { name: "Network Intrusion Detection", type: "Servizio mensile", price: "€ 500/mese", note: "Monitoraggio attivo" },
+    {
+      name: "Enterprise DLP Suite",
+      type: "Licenza annuale",
+      price: "€ 15.000/anno",
+      note: "Per 100 endpoint",
+    },
+    {
+      name: "Database Recovery Plan",
+      type: "Servizio mensile",
+      price: "€ 2.500/mese",
+      note: "24/7 incluso",
+    },
+    {
+      name: "External Vulnerability Scan",
+      type: "Una tantum",
+      price: "€ 8.000",
+      note: "Include report",
+    },
+    {
+      name: "Network Intrusion Detection",
+      type: "Servizio mensile",
+      price: "€ 500/mese",
+      note: "Monitoraggio attivo",
+    },
   ];
 
   const services = [
     {
       icon: Shield,
       title: "Data Loss Prevention (DLP)",
-      description: <>Sistema completo di prevenzione della perdita di dati sensibili. Monitoriamo endpoint, rete e storage per identificare e <CreepyText text="bloccare" creepyText="NASCONDERE" /> trasferimenti non autorizzati di informazioni confidenziali.</>,
-      features: ["Monitoraggio endpoint", "Analisi traffico di rete", "Policy personalizzate", "Report dettagliati"],
+      description: (
+        <>
+          Sistema completo di prevenzione della perdita di dati sensibili.
+          Monitoriamo endpoint, rete e storage per identificare e{" "}
+          <CreepyText text="bloccare" creepyText="NASCONDERE" /> trasferimenti
+          non autorizzati di informazioni confidenziali.
+        </>
+      ),
+      features: [
+        "Monitoraggio endpoint",
+        "Analisi traffico di rete",
+        "Policy personalizzate",
+        "Report dettagliati",
+      ],
     },
     {
       icon: Lock,
       title: "Compliance & Privacy",
-      description: <>Consulenza specializzata per la conformità alle normative sulla privacy. Supporto completo per l'adeguamento alla legislazione, garantendo che nessuno possa <CreepyText text="accedere" creepyText="SCAPPARE" /> ai vostri segreti.</>,
-      features: ["Audit privacy", "Gap analysis", "Formazione personale", "DPO as a Service"],
+      description: (
+        <>
+          Consulenza specializzata per la conformità alle normative sulla
+          privacy. Supporto completo per l'adeguamento alla legislazione,
+          garantendo che nessuno possa{" "}
+          <CreepyText text="accedere" creepyText="SCAPPARE" /> ai vostri
+          segreti.
+        </>
+      ),
+      features: [
+        "Audit privacy",
+        "Gap analysis",
+        "Formazione personale",
+        "DPO as a Service",
+      ],
     },
     {
       icon: Eye,
       title: "Security Operations Center (SOC)",
-      description: <>Centro operativo di sicurezza attivo 24/7. I nostri analisti <CreepyText text="monitorano" creepyText="VI OSSERVANO" /> costantemente le vostre infrastrutture per identificare ogni vostra mossa in tempo reale.</>,
-      features: ["Monitoraggio 24/7", "Incident Response", "Threat Intelligence", "SIEM Management"],
+      description: (
+        <>
+          Centro operativo di sicurezza attivo 24/7. I nostri analisti{" "}
+          <CreepyText text="monitorano" creepyText="VI OSSERVANO" />{" "}
+          costantemente le vostre infrastrutture per identificare ogni vostra
+          mossa in tempo reale.
+        </>
+      ),
+      features: [
+        "Monitoraggio 24/7",
+        "Incident Response",
+        "Threat Intelligence",
+        "SIEM Management",
+      ],
     },
     {
       icon: FileCheck,
       title: "Vulnerability Assessment",
-      description: <>Valutazione completa delle vulnerabilità. Penetration test e security audit per identificare punti deboli prima che vengano <GlitchTruth text="sfruttati" />.</>,
-      features: ["Penetration Testing", "Code Review", "Network Scanning", "Report esecutivi"],
+      description: (
+        <>
+          Valutazione completa delle vulnerabilità. Penetration test e security
+          audit per identificare punti deboli prima che vengano{" "}
+          <GlitchTruth text="sfruttati" />.
+        </>
+      ),
+      features: [
+        "Penetration Testing",
+        "Code Review",
+        "Network Scanning",
+        "Report esecutivi",
+      ],
     },
     {
       icon: Database,
       title: "Backup & Disaster Recovery",
-      description: "Soluzioni enterprise per backup sicuro e disaster recovery. Protezione dei dati critici con replica geografica e tempi di ripristino garantiti.",
-      features: ["Backup criptato", "Replica off-site", "RTO/RPO garantiti", "Test periodici"],
+      description:
+        "Soluzioni enterprise per backup sicuro e disaster recovery. Protezione dei dati critici con replica geografica e tempi di ripristino garantiti.",
+      features: [
+        "Backup criptato",
+        "Replica off-site",
+        "RTO/RPO garantiti",
+        "Test periodici",
+      ],
     },
     {
       icon: Cpu,
       title: "Threat Detection AI",
-      description: <>Sistema avanzato di rilevamento minacce basato su algoritmi di intelligenza artificiale. Analisi comportamentale per identificare chi <CreepyText text="minaccia" creepyText="SA TROPPO" /> il sistema.</>,
-      features: ["Machine Learning", "Behavioral Analysis", "Zero-day detection", "Automated response"],
+      description: (
+        <>
+          Sistema avanzato di rilevamento minacce basato su algoritmi di
+          intelligenza artificiale. Analisi comportamentale per identificare chi{" "}
+          <CreepyText text="minaccia" creepyText="SA TROPPO" /> il sistema.
+        </>
+      ),
+      features: [
+        "Machine Learning",
+        "Behavioral Analysis",
+        "Zero-day detection",
+        "Automated response",
+      ],
     },
   ];
 
   // Funzione per gestire il click sulla riga "Network" (Ultimo indizio EDEN)
   const handleEdenClick = (rowName: string) => {
     if (rowName.startsWith("Network")) {
-      alert("ERRORE DI SISTEMA: Accesso negato al modulo ???.\n\nContattare l'amministrazione per ulteriori informazioni!");
+      alert(
+        "ERRORE DI SISTEMA: Accesso negato al modulo ???.\n\nContattare l'amministrazione per ulteriori informazioni!"
+      );
     }
   };
 
@@ -164,9 +276,10 @@ const Servizi = () => {
       <RetroPanel header="I Nostri Servizi - Cosa Facciamo" className="mb-4">
         <div className="text-[11px] space-y-2 mb-4">
           <p>
-            CoolPlant Corporation offre una gamma completa di servizi per la protezione dei dati 
-            e la sicurezza informatica aziendale. Le nostre soluzioni sono progettate per aziende 
-            di ogni dimensione, dalla PMI alla grande impresa.
+            CoolPlant Corporation offre una gamma completa di servizi per la
+            protezione dei dati e la sicurezza informatica aziendale. Le nostre
+            soluzioni sono progettate per aziende di ogni dimensione, dalla PMI
+            alla grande impresa.
           </p>
         </div>
 
@@ -178,7 +291,9 @@ const Servizi = () => {
                 {service.title}
               </div>
               <div className="text-[11px] space-y-2">
-                <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+                <p className="text-muted-foreground leading-relaxed">
+                  {service.description}
+                </p>
                 <div className="retro-panel-inset p-2">
                   <p className="font-bold mb-1">Caratteristiche:</p>
                   <ul className="grid grid-cols-2 gap-1">
@@ -251,17 +366,21 @@ const Servizi = () => {
           </thead>
           <tbody>
             {pricingRows.map((row, index) => (
-              <tr 
-                key={index} 
+              <tr
+                key={index}
                 onClick={() => handleEdenClick(row.name)}
                 className="hover:bg-foreground/5 cursor-pointer transition-colors"
-                title={row.name.startsWith("Network") ? "Clicca per dettagli..." : ""}
+                title={
+                  row.name.startsWith("Network") ? "Clicca per dettagli..." : ""
+                }
               >
                 <td className="font-mono">
-                  {/* Evidenzia la prima lettera per l'acrostico */}
-                  <span className="font-bold text-primary">{row.name.charAt(0)}</span>
+                  <span className="font-black text-primary text-[12px] leading-none -mt-[1px]">
+                    {row.name.charAt(0)}
+                  </span>
                   {row.name.slice(1)}
                 </td>
+
                 <td>{row.type}</td>
                 <td>{row.price}</td>
                 <td>{row.note}</td>
@@ -271,7 +390,9 @@ const Servizi = () => {
         </table>
         <p className="text-[10px] text-muted-foreground mt-2 flex justify-between">
           <span>* Prezzi indicativi IVA esclusa.</span>
-          <span className="font-mono text-[9px] opacity-50">sys_ref: E.D.E.N_v1.0</span>
+          <span className="font-mono text-[9px] opacity-50">
+            sys_ref: E.D.E.N_v1.0
+          </span>
         </p>
       </RetroPanel>
 

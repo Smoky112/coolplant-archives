@@ -248,7 +248,7 @@ const Index = () => {
                 <div>
                   <p className="font-bold">File EDEN.DAT</p>
                   <p className="text-muted-foreground text-[9px] font-mono select-all">
-                    Err: <span className="text-[hsl(var(--status-danger))]">48454C50</span> [CORRUPT]
+                    Err: <span className="text-[hsl(var(--status-danger))]">53415645204D45</span> [CORRUPT]
                   </p>
                 </div>
               </div>
