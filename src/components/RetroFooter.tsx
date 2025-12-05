@@ -66,7 +66,7 @@ const RetroFooter = () => {
         </div>
         <div className="flex items-center gap-2">
           <span>Visitatori:</span>
-          <span className="hit-counter">0024857</span>
+          <span className="hit-counter">6024857</span> {/* Da usare */}
           <span className="text-muted-foreground">|</span>
           <span>Ottimizzato per Internet Explorer 5.5+</span>
           <span className="text-muted-foreground">|</span>

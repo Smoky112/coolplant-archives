@@ -15,7 +15,7 @@ interface Employee {
   phone: string;
   image: string;
   description: string;
-  status?: "active" | "unavailable" | "unknown";
+  status?: "active" | "unavailable" | "unknown" | "???";
   note?: string;
 }
 
@@ -39,29 +39,29 @@ const Team = () => {
     },
     {
       id: 2,
-      name: "Marco",
-      surname: "Trevisan",
-      role: "CFO",
-      department: "Finanza",
-      floor: "Piano 14",
-      email: "m.trevisan@coolplant.it",
-      phone: "Interno 1400",
+      name: "Giulia",
+      surname: "Marchi",
+      role: "CEO ASSISTANT",
+      department: "Direzione",
+      floor: "Piano 15",
+      email: "g.Marchi@coolplant.it",
+      phone: "Interno 1510",
       image: "/images/employees/trevisan.jpg",
-      description: "Responsabile finanziario con 15 anni di esperienza nel settore. Gestisce budget e investimenti strategici dell'azienda.",
-      status: "unavailable",
+      description: "Assiste il CEO nelle attività quotidiane e nella gestione degli impegni. Esperta in comunicazione aziendale e relazioni esterne.",
+      status: "???",
     },
     {
       id: 3,
-      name: "Alessandro",
+      name: "Roberto",
       surname: "Negri",
-      role: "CTO",
-      department: "Tecnologia",
+      role: "Security",
+      department: "HR & Security",
       floor: "Piano 13",
       email: "a.negri@coolplant.it",
       phone: "Interno 1300",
       image: "/images/employees/negri.jpg",
-      description: "Dirige lo sviluppo tecnologico e l'architettura dei sistemi di sicurezza. Esperto in crittografia e DLP enterprise.",
-      status: "active",
+      description: "Responsabile della sicurezza fisica e delle risorse umane. Coordina le procedure di accesso e garantisce la conformità alle normative aziendali.",
+      status: "unavailable",
     },
     {
       id: 4,
@@ -140,6 +140,8 @@ const Team = () => {
         return "text-[hsl(var(--status-warning))]";
       case "unknown":
         return "text-[hsl(var(--status-danger))]";
+      case "???":
+        return "text-[hsl(var(--status-corrupt))] animate-pulse [text-shadow:1px_0_#ff0000,-1px_0_#00ffff] blur-[0.3px]";
       default:
         return "text-muted-foreground";
     }
@@ -153,6 +155,8 @@ const Team = () => {
         return "● NON DISPONIBILE";
       case "unknown":
         return "● SCONOSCIUTO";
+      case "???":
+        return "● ???";
       default:
         return "● N/D";
     }
@@ -163,7 +167,7 @@ const Team = () => {
       <RetroPanel header="👥 Team CoolPlant Corporation" className="mb-4">
         <div className="text-[11px] space-y-2 mb-4">
           <p>
-            Il nostro team di <strong>oltre 150 professionisti</strong> garantisce sicurezza e protezione 
+            Il nostro team di <strong>oltre 150 professionisti</strong> garantisce sicurezza e protezione
             dei dati 24 ore su 24. Clicca su ogni dipendente per visualizzare la scheda completa.
           </p>
           <div className="retro-panel-inset p-2 text-[10px] text-muted-foreground">
@@ -201,7 +205,7 @@ const Team = () => {
       {selectedEmployee && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="max-w-md w-full">
-            <RetroPanel 
+            <RetroPanel
               header={`📋 Scheda Dipendente - ${selectedEmployee.surname.toUpperCase()}`}
             >
               <div className="relative">
