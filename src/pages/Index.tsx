@@ -49,6 +49,7 @@ const Index = () => {
     setTimeout(() => {
       setShowIntro(false); // Rimuove dal DOM dopo l'animazione
       localStorage.setItem("coolplant_intro_seen", "true");
+      localStorage.setItem("glitchStated", "false");
     }, 700); // 700ms corrisponde alla classe duration-700
   };
 
