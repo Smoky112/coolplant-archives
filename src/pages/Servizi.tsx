@@ -266,7 +266,7 @@ const Servizi = () => {
   const handleEdenClick = (rowName: string) => {
     if (rowName.startsWith("Network")) {
       alert(
-        "ERRORE DI SISTEMA: Accesso negato al modulo ???.\n\nContattare l'amministrazione per ulteriori informazioni!"
+        "ERRORE DI SISTEMA: Accesso negato al modulo E*??.\n\n Contatta l'amministratore tramite T42551!"
       );
     }
   };

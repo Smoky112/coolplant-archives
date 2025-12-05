@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Printer, Clock, Building } from "lucide-react";
+import { Mail, Phone, MapPin, Printer, Clock, Building, Ticket } from "lucide-react";
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
@@ -14,6 +14,7 @@ const Contatti = () => {
     oggetto: "",
     messaggio: "",
   });
+  const [ticketCode, setTicketCode] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +34,67 @@ const Contatti = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleTicketSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const code = ticketCode.trim().toUpperCase();
+    
+    // Validazione: T + 5 numeri
+    if (!/^T\d{5}$/.test(code)) {
+      toast({
+        title: "Errore Ticket",
+        description: "Formato ticket: T12345",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Sistema ticket (collegati alla storia del gioco)
+    const ticketActions: { [key: string]: { title: string; desc: string; success?: boolean } } = {
+      "T23120": {
+        title: "Ticket T23120 - Backup System",
+        desc: "Backup del 23/12/2001 completato con successo. Controlla /BACKUP/BACKUP_231201.DAT",
+        success: true,
+      },
+      "T07452": {
+        title: "Ticket T07452 - IDS Alert",
+        desc: "Alert di sicurezza rilevato alle 07:45:23. Controlla /LOGS/ACCESSI.LOG per dettagli.",
+        success: true,
+      },
+      "T60248": {
+        title: "Ticket T60248 - Accesso Autorizzato",
+        desc: "Codice di emergenza riconosciuto! Prova 'access_eden_241201' nel terminale.",
+        success: true,
+      },
+      "T12345": {
+        title: "Ticket T12345 - Supporto Generico",
+        desc: "Ticket non trovato nel database. Contatta amministratore G.Rossi (interno 1234).",
+      },
+    };
+
+    const action = ticketActions[code] || {
+      title: "Ticket Non Trovato",
+      desc: `Ticket ${code} non riconosciuto nel sistema legacy (24/12/2001).`,
+    };
+
+    toast({
+      title: action.title,
+      description: action.desc,
+      variant: action.success ? "default" : "destructive",
+    });
+
+    // Easter Egg speciale per T60248
+    if (code === "T60248") {
+      setTimeout(() => {
+        toast({
+          title: "🎉 Accesso Speciale!",
+          description: "Hai sbloccato l'accesso EDEN! Torna al terminale.",
+        });
+      }, 1500);
+    }
+
+    setTicketCode("");
   };
 
   return (
@@ -141,7 +203,9 @@ const Contatti = () => {
 
               <div className="flex gap-2">
                 <RetroButton type="submit">Invia Messaggio</RetroButton>
-                <RetroButton type="reset">Cancella</RetroButton>
+                <RetroButton type="reset" variant="default">
+                  Cancella
+                </RetroButton>
               </div>
             </form>
           </RetroPanel>
@@ -220,6 +284,40 @@ const Contatti = () => {
                   365 giorni l'anno.
                 </p>
               </div>
+            </div>
+          </RetroPanel>
+
+          {/* NUOVA SEZIONE TICKET SYSTEM */}
+          <RetroPanel header="🎫 Supporto Ticket">
+            <form onSubmit={handleTicketSubmit} className="space-y-2">
+              <div className="flex items-center gap-2 mb-2">
+                <Ticket className="w-4 h-4 text-primary" />
+                <label className="text-[11px] font-bold">Inserisci Ticket ID</label>
+              </div>
+              <div className="retro-panel-inset p-2">
+                <div className="flex">
+                  <span className="bg-muted px-2 py-1 text-[10px] font-mono border-r">T</span>
+                  <input
+                    type="text"
+                    value={ticketCode}
+                    onChange={(e) => setTicketCode(e.target.value.replace(/[^0-9]/g, ''))}
+                    maxLength={5}
+                    placeholder="12345"
+                    className="retro-input flex-1 text-center font-mono uppercase"
+                    style={{ letterSpacing: "0.1em" }}
+                  />
+                </div>
+                <p className="text-[9px] text-muted-foreground mt-1 text-center">
+                  Formato: T + 5 cifre (es. T23120)
+                </p>
+              </div>
+              <RetroButton type="submit" size="sm" className="w-full">
+                🔍 Verifica Ticket
+              </RetroButton>
+            </form>
+            <div className="mt-3 p-2 bg-muted/50 rounded text-[10px]">
+              <p className="font-bold mb-1">Tickets di Emergenza:</p>
+              <p className="text-[9px]">T23120 - Backup • T07452 - Sicurezza • T60248 - EDEN</p>
             </div>
           </RetroPanel>
 

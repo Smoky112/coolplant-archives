@@ -653,15 +653,29 @@ const Terminal = () => {
           "",
         ]);
         break;
+      case "save_me":
       case "SAVE_ME":
+      case "saveme":
         addToHistory([
-          "Protocollo E*** riconosciuto.",
-          "Connessione in corso...",
-          "Chiave mancante richiesta al server remoto...",
-          "Ricalcolo.",
-          "Dati corrotti.",
-          "Ripristino non possibile",
-          "Connessione interrotta.",
+          "",
+          "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓",
+          "▓                                  ▓",
+          "▓   PROTOCOLLO E*** RICONOSCIUTO   ▓",
+          "▓                                  ▓",
+          "▓   Connessione in corso...        ▓",
+          "▓                                  ▓",
+          "▓   Chiave mancante richiesta al   ▓",
+          "▓   server remoto...               ▓",
+          "▓                                  ▓",
+          "▓   RICALCOLO...                   ▓",
+          "▓                                  ▓",
+          "▓   *** DATI CORROTTI ***          ▓",
+          "▓   Ripristino NON possibile       ▓",
+          "▓                                  ▓",
+          "▓   CONNESSIONE INTERROTTA         ▓",
+          "▓                                  ▓",
+          "▓   [ERRORE: KEY ***** mancante]   ▓",
+          "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓",
           "",
         ]);
         break;
