@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
@@ -368,6 +369,7 @@ Dicembre 2001
 };
 
 const Terminal = () => {
+  const navigate = useNavigate();
   const [history, setHistory] = useState<string[]>([
     "CoolPlant Corporation - Sistema Legacy",
     "Windows 2000 Server [Versione 5.00.2195]",
@@ -600,6 +602,23 @@ const Terminal = () => {
           "[ERRORE: Amministratore non raggiungibile]",
           "",
         ]);
+        break;
+
+      case "access_eden_241201":
+        addToHistory([
+          "",
+          "▓▓▓ CODICE DI EMERGENZA RICONOSCIUTO ▓▓▓",
+          "",
+          "Bypass sicurezza in corso...",
+          "Caricamento archivio classificato...",
+          "",
+          "[AVVISO: Connessione non sicura]",
+          "[AVVISO: Tracciamento IP attivo]",
+          "",
+        ]);
+        setTimeout(() => {
+          navigate("/eden");
+        }, 2000);
         break;
 
       default:
