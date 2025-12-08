@@ -11,16 +11,45 @@ import {
   AlertOctagon 
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { baseNewsItems, incidentNews, backupNews, NewsItem } from "@/lib/newsData";
+import {
+  systemsRestored,
+  getServerFarmStatus,
+  getSOCMonitorStatus,
+  getFirewallStatus,
+  getBackupStatus,
+  getAuthServerStatus,
+} from "@/lib/systemState";
 
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   // --- STATO E GESTIONE POPUP INIZIALE ---
   const [showIntro, setShowIntro] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  // Stati dei sistemi
+  const serverFarm = getServerFarmStatus(systemsRestored);
+  const socMonitor = getSOCMonitorStatus(systemsRestored);
+  const firewall = getFirewallStatus(systemsRestored);
+  const backup = getBackupStatus(systemsRestored);
+  const authServer = getAuthServerStatus(systemsRestored);
+
+  // News per la homepage (ultime 5)
+  const homeNews: NewsItem[] = [
+    incidentNews,
+    backupNews,
+    ...baseNewsItems.slice(0, 3)
+  ];
+
+  const handleNewsClick = (newsId: number) => {
+    navigate(`/news?article=${newsId}`);
+  };
 
   // All'avvio: controlla se l'intro è già stata vista in passato
   useEffect(() => {
@@ -166,50 +195,52 @@ const Index = () => {
 
         {/* Sidebar: Stato Sistemi + Alert */}
         <div className="space-y-4">
-          <RetroPanel header="Stato Sistemi">
+        <RetroPanel header="Stato Sistemi">
             <div className="space-y-2 text-[10px]">
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Server className="w-3 h-3" />
                   Server Farm
                 </span>
-                <span className="text-[hsl(var(--status-danger))] font-bold blink">● OFFLINE</span>
+                <span className={serverFarm.className}>{serverFarm.label}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Eye className="w-3 h-3" />
                   SOC Monitor
                 </span>
-                <span className="text-[hsl(var(--status-warning))] font-bold">● DEGRADATO</span>
+                <span className={socMonitor.className}>{socMonitor.label}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Shield className="w-3 h-3" />
                   Firewall
                 </span>
-                <span className="text-[hsl(var(--status-danger))] font-bold">● BREACH</span>
+                <span className={firewall.className}>{firewall.label}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Database className="w-3 h-3" />
                   Backup
                 </span>
-                <span className="text-[hsl(var(--status-corrupt))] font-bold">● CORROTTO</span>
+                <span className={backup.className}>{backup.label}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1">
                   <Lock className="w-3 h-3" />
                   Auth Server
                 </span>
-                <span className="text-muted-foreground font-bold">● N/D</span>
+                <span className={authServer.className}>{authServer.label}</span>
               </div>
               <hr className="border-border my-2" />
               <p className="text-center text-muted-foreground">
-                Ultimo aggiornamento: 24/12/2001 <span className="text-[hsl(var(--status-danger))]">07:45</span>
+                Ultimo aggiornamento: {systemsRestored ? "08/12/2025 14:30" : "24/12/2001"} <span className={systemsRestored ? "text-[hsl(var(--status-success))]" : "text-[hsl(var(--status-danger))]"}>{systemsRestored ? "✓" : "07:45"}</span>
               </p>
-              <p className="text-center text-[9px] text-[hsl(var(--status-corrupt))]">
-                [ERRORE: Connessione interrotta]
-              </p>
+              {!systemsRestored && (
+                <p className="text-center text-[9px] text-[hsl(var(--status-corrupt))]">
+                  [ERRORE: Connessione interrotta]
+                </p>
+              )}
             </div>
           </RetroPanel>
 
@@ -303,28 +334,22 @@ const Index = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>24/12/2001</td>
-                <td className="text-[hsl(var(--status-danger))]">
-                  <span className="blink">●</span> <a href="#" className="text-[hsl(var(--status-danger))]">[URGENTE] Incidente sicurezza Piano 15</a>
-                </td>
-              </tr>
-              <tr>
-                <td>23/12/2001</td>
-                <td><a href="#">Backup natalizio completato</a> <span className="text-[hsl(var(--status-corrupt))] text-[9px]">[CORROTTO]</span></td>
-              </tr>
-              <tr>
-                <td>20/12/2001</td>
-                <td><a href="#">Nuovo Data Center Tier IV operativo</a></td>
-              </tr>
-              <tr>
-                <td>15/12/2001</td>
-                <td><a href="#">Partnership con Cisco Systems</a></td>
-              </tr>
-              <tr>
-                <td>10/12/2001</td>
-                <td><a href="#">Certificazione ISO 27001 ottenuta</a></td>
-              </tr>
+              {homeNews.map((news) => (
+                <tr 
+                  key={news.id} 
+                  className="cursor-pointer hover:bg-muted/50 transition-colors"
+                  onClick={() => handleNewsClick(news.id)}
+                >
+                  <td>{news.date}</td>
+                  <td className={news.id === 0 ? "text-[hsl(var(--status-danger))]" : ""}>
+                    {news.id === 0 && <span className="blink">●</span>}{" "}
+                    <span className={news.id === 0 ? "text-[hsl(var(--status-danger))]" : "hover:underline"}>
+                      {news.title}
+                    </span>
+                    {news.id === -1 && <span className="text-[hsl(var(--status-corrupt))] text-[9px] ml-1">[CORROTTO]</span>}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <div className="mt-2">
