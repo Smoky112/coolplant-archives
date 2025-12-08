@@ -25,26 +25,29 @@ const fileSystem: FileSystem = {
       "MAIL",
       "DOCUMENTI",
       "SISTEMA.INI",
-      "LEGGIMI.TXT",
+      "INFO.TXT",
     ],
   },
-  "/LEGGIMI.TXT": {
+  "/INFO.TXT": {
     type: "file",
     downloadable: true,
     content: `========================================
-  COOLPLANT CORPORATION - SERVER PRINCIPALE
-  Ultimo accesso: 24/12/2001 07:45
+ COOLPLANT CORPORATION - SERVER PRINCIPALE
+ Ultimo accesso: 24/12/2001 07:45
 ========================================
 
 ATTENZIONE: Questo sistema contiene dati 
 riservati. Ogni accesso non autorizzato 
 verra' perseguito a norma di legge.
 
-Per assistenza: interno 1234
-Amministratore: G.Rossi
+Per assistenza: interno 4004
+Amministratore: F.Griotti
 
 [NOTA SISTEMA: Backup automatico FALLITO]
-[NOTA SISTEMA: 3 file corrotti rilevati]`,
+[NOTA SISTEMA: ERRORE CRITICO - Settore 0x7F2A]
+[AVVISO: Contattare SOC Piano -1 per dettagli]
+[AVVISO: Data: 24/12/2001 - Sistema in stato anomalo]
+`,
   },
   "/SISTEMA.INI": {
     type: "file",
@@ -58,11 +61,10 @@ FirewallStatus=COMPROMISED
 IDSAlerts=47
 LastScan=23/12/2001 23:00
 
-[EDEN Module]
-Status=LOCKED
-AccessLevel=5
-LastAccess=D.BELLAPIANTA 24/12/2001 07:30
-; ERRORE: Chiave di decrittazione non valida`,
+[System Status]
+LastUserAccess=07:30
+ModuleStatus=LOCKED
+AccessLevel=REQUIRED`,
   },
   "/BACKUP": {
     type: "dir",
@@ -73,15 +75,23 @@ LastAccess=D.BELLAPIANTA 24/12/2001 07:30
     downloadable: true,
     content: `BACKUP GIORNALIERO - 23/12/2001
 ================================
+Data: 23/12/2001
+Ora: 23:59:15
 Dimensione: 2.4 GB
 Stato: COMPLETATO
 Checksum: OK
 
-File inclusi: 15.847
+Operatore: Francesco Griotti (Sistemista Senior)
 Database: SQL_MAIN, SQL_CLIENTI
-Email: Exchange Server (14.523 messaggi)
+Email: 14.523 messaggi (Exchange Server)
+File inclusi: 15.847
 
-[Backup eseguito con successo]`,
+Special Archives: *D** (encrypted, size: 847 MB)
+
+[Backup eseguito con successo]
+[Nota: Prossimo backup pianificato 24/12 06:00]
+[Nota: Backup non completato il 24/12]
+`,
   },
   "/BACKUP/BACKUP_221201.DAT": {
     type: "file",
@@ -94,20 +104,28 @@ Checksum: OK`,
   "/BACKUP/EDEN_BACKUP.DAT": {
     type: "file",
     corrupted: true,
-    content: `ERR0R: F1LE C0RRUPTED
+    content: `──────────────────────────────────────────
+ERR0R: F1LE C0RRUPTED
 ======================
 CRC Ch3ck F41LED
 S3ct0r 0x7F2A unr34d4ble
+Data Loss: ~87%
 
 P4rt14l d4t4 r3c0v3r3d:
 ------------------------
-...PR0G3TT0 3D3N - CL4SS1F1C4T0...
-...sc4nd4l0 f1n4nz14r10 M1l4n0...
-...D.B3LL4P14NT4 - 4cc3ss0 n3g4t0...
-...f1l3 PROVA_001.DOC - 3l1m1n4t0...
-...t3st1m0n14nz4 - R0SS1 M4RC0...
-...ERR0R 0x0000F4T4L...
-[F1N3 D4T1 R3CUP3R4B1L1]`,
+...ARCH1V10 R1S3RV4T0 - 4CC3SS0 L1V3LL0 5...
+...PR0G3TT0 "3D3N" - CL4SS1F1C4T0...
+...cont1n3nt3: SCAND4L1 F1N4NZ14R1 N4Z10N4L1...
+...r1m3ss10n3: "M1l4n0 - G1ugno 2001"...
+...n0m1 1nv0lt1: T4GL14F3RR1, C4ND10, Z1M0L0...
+...d0cum3nt1 3L1M1N4T1 il 24/12/2001 07:40...
+...t3st1m0n14nz4 tr4sc0lt4: "GR10TT1 FR4NC3SC0"...
+...R3F3R3NZ3: CL13NT3 "M3T4LL1" - R1M0SS0 20/12...
+...C4SS3TT4 S1CUR3ZZ4: M1L4n0...
+...3D3N.K3Y: L0C4Z10N3 SCOND0SC14NT4...
+...ERR0R 0x0000F4T4L - Settore 0x7F2A...
+[F1N3 D4T1 R3CUP3R4B1L1]
+`,
   },
   "/LOGS": {
     type: "dir",
@@ -116,86 +134,153 @@ P4rt14l d4t4 r3c0v3r3d:
   "/LOGS/ACCESSI.LOG": {
     type: "file",
     downloadable: true,
-    content: `=== LOG ACCESSI 24/12/2001 ===
+    content: `S1st3m4: C00LPL4NT-%%%%%-01
 
-03:00:15 SYSTEM    Boot automatico
-03:05:22 SYSTEM    Servizi avviati
-07:15:00 SYSTEM    Morning_Check eseguito
-07:28:33 D.BELLAPIANTA Login - Piano 15
-07:29:01 D.BELLAPIANTA Accesso EDEN - OK
-07:30:45 D.BELLAPIANTA File: PROVA_FINALE.DOC
-07:35:12 D.BELLAPIANTA Stampa: 3 pagine
-07:42:18 ???       Login tentativo - FALLITO
-07:43:55 ???       Login tentativo - FALLITO  
-07:44:58 admin     Login tentativo - FALLITO
-07:45:23 ???       ACCESSO FORZATO RILEVATO
-07:45:24 SYSTEM    !!! IDS ALERT !!!
-07:45:25 SYSTEM    Connessione interrotta
----FINE LOG---`,
+03:00:15 SYST3M      B00t 4ut0m4t1c0 [S0C T34m: 0K]
+03:05:22 SYST3M      S3rv1z1 4vv14t1
+07:15:00 SYST3M      M0rn1ng_Ch3ck 3s3gu1t0 [N0 4N0M4L13S]
+07:28:33 D.B3LL4P14NT4 L0g1n - P14n0 15 [%%%%%%%%reader]
+07:29:01 D.B3LL4P14NT4 4cc3ss0 %%%% - 0K [L1v3ll0 5]
+07:30:45 D.B3LL4P14NT4 F1l3: PROV4_F1N4L3.D0C [R34D 4CC3SS]
+07:35:12 D.B3LL4P14NT4 St4mp4: 3 p4g1n3 [Pr1nt3r P14n0 15]
+07:42:18 %%%         L0g1n t3nt4t1v0 - F4LL1T0 [SSH %%%%%%%%%%]
+07:43:55 ???         L0g1n t3nt4t1v0 - F4LL1T0 [R3try p4tt3rn]
+07:44:58 4dm1n       L0g1n t3nt4t1v0 - F4LL1T0 [Bruit3 f0rc3 d3t3ct3d]
+07:45:23 ???         4CC3SS0 F0RZ4T0 R1L3V4T0 [PHYSIC4L D00R SENS0R]
+07:45:24 SYSTEM      !!! 1DS 4L3RT !!! [Bruit3 f0rc3 %%%% M0dul3]
+07:45:25 SYSTEM      C0nn3ss10n3 C4M-15 1NT3RROTT4 [SIGN4L L0ST - S4B0T4GG10?]
+07:45:26 SYSTEM      4ll4rm3 s1l3nz10s0 4tt1v4t0 [S3CURITY - N0T1F1ED]
+07:45:27 SYSTEM      L0g P14n0 15 - C0RRU2T10N D3T3CT3D
+--- F1N3 L0G ---
+
+[N0T4: 15 m3ss4gg1 3l1m1n4t1 d4 1NB0X il 24/12/2001 07:40]
+[N0T4: 4cc3ss l0g P14n0 15 c0rr0tt0 p4rz14lm3nt3 - S3tt0r3 0x7F2A]
+[3RR0R: D4T4 r3c0v3ry n0t p0ss1bl3]
+[3RR0R: %%%%%%%%%%%ERROR%%%%%%%%%%%]
+`,
   },
   "/LOGS/SICUREZZA.LOG": {
     type: "file",
-    content: `=== SECURITY LOG ===
+    content: `=== SECURITY LOG - 24/12/2001 ===
 
-[24/12/2001 07:45:23] CRITICAL
-Tipo: Accesso non autorizzato
+[07:45:23] CRITICAL
+Tipo: INTRUSIONE FISICA
 Origine: Piano 15 - Ufficio CEO
 Dettagli: Porta forzata - Sensore attivato
-Risposta: Allarme silenzioso attivato
+Risposta: Allarme silenzioso + SOC notificato
+Stato: IN CORSO
 
-[24/12/2001 07:45:24] CRITICAL  
-Tipo: IDS Alert
-Pattern: Brute force attack
-Target: EDEN Module
-Tentativi: 3
-IP Origine: 192.168.15.???
+[07:45:24] CRITICAL
+Tipo: IDS ALERT - BRUTE FORCE
+Pattern: Tentativo accesso EDEN Module
+Tentativi: 3 in 2 minuti
+IP Origine: 192.168.15.???: SSH port 22
+Profilo: "admin" account
+Stato: BLOCCATO
 
-[24/12/2001 07:45:25] FATAL
+[07:45:25] FATAL
 Sistema di monitoraggio: OFFLINE
-Ultima immagine: CAM_15_CORRUPTED.BMP
-Motivo: Segnale perso`,
+Ultima immagine: CAM-15_24122001_074525.BMP
+Ora perdita segnale: 07:45:25
+Dimensione: 0 bytes [CORRUPTED/DELETED]
+Motivo segnalato: "Perdita segnale cavo"
+Sospetto: SABOTAGGIO
+
+[07:45:26] CRITICAL
+Status: Security Desk tentativo contatto CEO
+Risultato: NESSUNA RISPOSTA
+Azione: Allerta Security fisica in corso
+
+[07:47:00] FATAL
+Status: Security Desk trova Davide Bellapianta
+Condizione: NON RESPIRA
+Causa apparente: TRAUMA CRANICO SEVERO
+Posizione: Ufficio Piano 15, accanto a PC
+Documento: PROVA_FINALE.DOC trovato per terra
+`,
   },
   "/LOGS/ERRORI.LOG": {
     type: "file",
     corrupted: true,
-    content: `ERR_DISK_READ_FAILURE
-ERR_CHECKSUM_INVALID
-ERR_FILE_NOT_FOUND: EDEN.KEY
-ERR_ACCESS_DENIED: Level 5 required
-ERR_CORR%%%%%%%%UPTED_S%%%ECTOR
-ERR_D4T4_L0ST_0x7F2A
-...
-[Log troncato - settori danneggiati]`,
+    content: `ERR_DISK_READ_FAILURE [Settore 0x7F2A]
+ERR_CHECKSUM_INVALID [EDEN backup integrity]
+ERR_FILE_NOT_FOUND: EDEN.KEY [MANCANTE - CRITICO]
+ERR_ACCESS_DENIED: Level 5 required [Tentativo illegale]
+ERR_CORR%%%%%%%%UPTED_S%%%ECTOR [DANNI FISICI]
+ERR_D4T4_L0ST_0x7F2A [IRRECUPERABILE]
+ERR_SYS_HALT: Settore critico inaccessibile
+ERR_CAM_15: Cable disconnected manually?
+ERR_BACKUP_FAIL: 24/12 06:00 not executed
+[AVVISO: Sistema in stato DEGRADATO]`,
   },
   "/LOGS/SOC_241201.LOG": {
     type: "file",
     downloadable: true,
-    content: `SOC REPORT - 24 DICEMBRE 2001
-=============================
+    content: `=============================
 Turno: Notturno (00:00-08:00)
-Operatore: Ferretti M.
+Operatore Capo: Nazary Ciola (Responsabile SOC)
+Team: Giuseppe Sapio, Matteo Paiella, Silvia Sardone
 
-00:00-03:00 Situazione normale
-03:22 - Alert IDS: Scansione porte esterna
-        Azione: Bloccato, IP in blacklist
-        
-04:15 - Anomalia traffico interno
-        Origine: Piano 15
-        Azione: Monitoraggio attivo
-        
-07:30 - CEO D.Bellapianta in ufficio
-        Nota: Insolito - vigilia di Natale
-        
-07:45 - ALERT CRITICO MULTIPLO
-        - Intrusione fisica Piano 15
-        - Tentativo accesso EDEN
-        - Perdita feed telecamere
-        
-07:46 - Tentativo contatto CEO: FALLITO
-07:47 - Allertata sicurezza fisica
-07:48 - [RAPPORTO INTERROTTO]
+--- REPORT NOTTURNO 23/12 ---
+22:00-23:59 Situazione normale, monitoraggio passivo
 
-=== FINE TURNO NON COMPLETATO ===`,
+23:22 - IDS Alert: Scansione porte esterna
+        Target: Router Cisco [Port 22, 3306, 1433]
+        Azione: Bloccato automatico, IP in blacklist
+        Note: Probabilmente script bot automatico
+        
+23:45 - Email notturne: 15 messaggi in INBOX
+        Mittenti: Vari
+        Note: Controllo rapido - niente strano
+
+--- REPORT MATTUTINO 24/12 ---
+04:15 - Anomalia traffico interno rilevata
+        Origine: Piano 15 (Ufficio CEO)
+        Destinazione: ...
+        Pattern: Legittimo, accesso autorizzato
+        Azione: Monitoraggio continuo
+        Operatore assegnato: Paiella
+        
+07:15 - Morning Check automatico completato
+        Status: NORMAL
+        
+07:28:33 - D.B3LL4P14NT4 L0g1n %%%CORRUPTED%%%
+        0r4: 07:28:33
+        M3t0d0: B10m3tr1c %%%%%%%% P14*@ 15
+        N0t4: :)@3§^?^! - ... ... ... ..., C30 %%%ERROR%%%
+        
+07:29 - 4cc3ss0 *£2* r1usc1t0
+        L1v3ll0: 5 (M4ss1m0)
+        D4t4b4s3: %%%SETTORE 0x7+** ILLEGGIBILE%%%
+        [DATI IRRECUPERABILI]
+      
+07:30 - Stampa rilevata da Piano 15
+        3 pagine stampate
+        Tempo: R3pido
+        
+07:42-07:44 - Brute force attack rilevato
+        Tentativi: 3 (admin, ???, ???)
+        Provenienza: Interno da 192.168.15.???
+        
+07:45:23 - ALERT CRITICO MULTIPLO !!!
+        - Sensore porta Piano 15 attivato
+        - Camera Piano 15 perdita segnale
+        
+07:45:30 - Ho contattato Filippo Zimolo (HR/Security)
+        Risultato: Avviso ricevuto, in arrivo subito
+        
+07:47:00 - Filippo Zimolo ha raggiunto Piano 15
+        Ha aperto la porta (chiave di Security)
+        
+07:47:15 - *** CORPO TROVATO ***
+        Davide Bellapianta - Non respira
+        Trauma cranico visibile
+        Posizione: Davanti PC
+      
+07:48:30 - Rapporto interrotto per ordine di Zimolo
+        [Bloccato - Responsabile Security]
+=== FINE TURNO ===
+`,
   },
   "/EDEN": {
     type: "dir",
@@ -322,57 +407,134 @@ CEO - CoolPlant Corporation`,
   "/DOCUMENTI/ORGANIGRAMMA.DOC": {
     type: "file",
     downloadable: true,
-    content: `COOLPLANT CORPORATION
-Organigramma Aziendale - Dicembre 2001
-======================================
-
-CEO: Davide Bellapianta [Piano 15]
+    content: `CEO: Davide Bellapianta [Piano 15]
   |
-  +-- CFO: Marco Trevisan [Piano 14]
+  +-- CFO: Daniela Candio [Piano 14]
+  |    └─ Accesso: Report finanziari, Contratti client
+  |    └─ Ultima modifica report: 20/12/2001
   |
-  +-- CTO: Alessandro Negri [Piano 13]
+  +-- CTO: Tagliaferri Lorenzo [Piano 13]
   |     |
-  |     +-- IT Manager: Giuseppe Rossi
-  |     +-- Security: Franco Ferretti
-  |     +-- SOC Team (12 operatori)
+  |     +-- IT Manager: Francesco Griotti
+  |     |    └─ Accesso: Sistema amministratore, backup, password
+  |     |
+  |     +-- Responsabile SOC: Nazary Ciola [Piano -1]
+  |     |    └─ Accesso: Tutti i log, monitoring 24/7
+  |     |    └─ Team: Giuseppe Sapio, Matteo Paiella, Silvia Sardone
+  |     |
+  |     +-- Network Admin: Aurora Nicolini
+  |     |    └─ Accesso: Firewall, VPN, router Cisco
+  |     |    └─ Note: "Molto vicina al CEO"
   |
-  +-- COO: Stefania Colombo [Piano 12]
+  +-- COO: [NOME NON REGISTRATO]
+  |    └─ Operazioni generali
   |
-  +-- Legal: Avv. Ext. Marchetti
+  +-- HR & Security Fisica: Filippo Zimolo [Piano 15]
+  |    └─ Accesso: Badge, telecamere, file dipendenti
+  |
+  +-- Comunicazione & PR: Charlotte Dicks
+  |    └─ Accesso: Sito web, comunicati, newsletter
+  |    └─ Note: "Ordine di censura su *D**"
+  |
+  +-- Consulente *D**: Prof. Mirko Alessandrini
+  |    └─ Accesso: Archivio ***N, dataset sensibili
+  |
+  +-- Data Analyst EDEN: Francesca Moretti
+  |    └─ Accesso: Dataset (sotto supervisione)
+  |
+  +-- Assistente CEO: Giulia Magri [Piano 15]
+       └─ Accesso: Agenda, email, chiavi ufficio
+       └─ Note: "Relazione professionale stretta"
 
 Dipendenti totali: 156
-Sedi: Brescia (HQ), Milano (commerciale)`,
+Sedi: Brescia (HQ), Milano (commerciale)
+`,
   },
   "/DOCUMENTI/CLIENTI_2001.XLS": {
     type: "file",
-    content: `ELENCO CLIENTI TOP 2001
-=======================
-1. Banca Nazionale Italiana - DLP
-2. Gruppo Industriale Lombardo - SOC
-3. ??? [DATI RIMOSSI] ???
-4. Assicurazioni Unite - Compliance
-5. ??? [DATI RIMOSSI] ???
-6. Pharma Italia Spa - Backup
+    content: `ELENCO CLIENTI TOP 2001 - RISERVATO
+===================================
 
-[NOTA: Alcuni nominativi rimossi per
- ordine della Direzione - 20/12/2001]`,
+1. Banca Nazionale Italiana
+   Servizio: DLP Completo
+   Importanza: CRITICA
+   Status: ATTIVO
+   
+2. Gruppo Industriale Lombardo
+   Servizio: SOC Gestito
+   Importanza: ALTA
+   Status: ATTIVO
+   
+3. [NOME RIMOSSO - ORDINE DIREZIONE]
+   Servizio: [RIMOSSO]
+   Importanza: MASSIMA
+   Status: [RIMOSSO] 
+   Notes: "Contatti potenzialmente compromessi"
+   Data rimozione: 20/12/2001
+   Rimosso da: D.Bellapianta
+   Motivo: [CENSURATO]
+   
+4. Assicurazioni Unite Italia
+   Servizio: Compliance Audit
+   Importanza: MEDIA
+   Status: ATTIVO
+   
+5. [NOME RIMOSSO - ORDINE DIREZIONE]
+   Servizio: [RIMOSSO]
+   Importanza: ALTA
+   Status: [RIMOSSO]
+   Notes: "Scandalo potenziale - vedi EDEN"
+   Data rimozione: 20/12/2001
+   Rimosso da: D.Bellapianta
+   
+6. Pharma Italia Spa
+   Servizio: Backup Critico
+   Importanza: MEDIA
+   Status: ATTIVO
+
+[NOTA AMMINISTRATIVA]
+Alcuni nominativi rimossi per ordine della Direzione (D.Bellapianta)
+Data: 20/12/2001
+Motivo: "Riservatezza e sensibilità informazioni"
+Accesso documento completo: Solo Bellapianta + Daniela Candio
+Backup completo: Francesco Griotti
+`,
   },
   "/DOCUMENTI/NOTA_SPESE.DOC": {
     type: "file",
     content: `Nota Spese - D.Bellapianta
 Dicembre 2001
+==============
 
 15/12 - Viaggio Milano: €245
-        Motivo: "Incontro riservato"
+        Motivo: "Incontro riservato - Cliente importante"
+        Accompagnato: [CENSURATO]
+        Durata: Giorno intero
+        Note: Viaggio urgente organizzato
         
-18/12 - Cena lavoro: €180  
+18/12 - Cena lavoro: €180
+        Luogo: Ristorante Milano
         Partecipanti: [CENSURATO]
+        Tipo: "Discussione sensibile"
+        Note: Non registrato in agenda ufficiale
         
 20/12 - Acquisto: €85
-        "Cassetta sicurezza - copia chiavi"
+        Negozio: "Cassaforte Milano - Bravetti & Co"
+        Oggetto: "Cassetta sicurezza - copia chiavi"
+        Note: "URGENTE - Necessario per documenti riservati"
         
 22/12 - Taxi notturno: €120
-        "Rientro urgente in sede"`,
+        Orario: 22:30-23:45
+        Partenza: Milano (zona uffici)
+        Destinazione: Brescia (grattacielo)
+        Motivo: "Rientro urgente in sede"
+        Note: Ha portato qualcosa da Milano?
+        
+23/12 - Nessuna spesa registrata
+        NOTA: Lavorò da ufficio tutto il giorno
+        
+24/12 -
+`,
   },
 };
 
@@ -597,7 +759,7 @@ const Terminal = () => {
           "│   └── DELETED",
           "├── DOCUMENTI",
           "├── SISTEMA.INI",
-          "└── LEGGIMI.TXT",
+          "└── INFO.TXT",
           "",
         ]);
         break;
@@ -789,7 +951,7 @@ const Terminal = () => {
               DOWNLOAD.
             </p>
             <div className="retro-panel-inset p-2 space-y-1">
-              <p>✓ LEGGIMI.TXT</p>
+              <p>✓ INFO.TXT</p>
               <p>✓ BACKUP/BACKUP_231201.DAT</p>
               <p>✓ LOGS/ACCESSI.LOG</p>
               <p>✓ LOGS/SOC_241201.LOG</p>

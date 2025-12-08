@@ -231,7 +231,7 @@ const Index = () => {
               {/* ALERT 2: VIRUS (Puzzle: Hover/Tooltip) */}
               <div
                 className="flex items-start gap-1 p-1 bg-muted cursor-help transition-colors hover:bg-foreground/5"
-                title="Target IP: 192.168.1.10 (SRV-MAIL), 192.168.1.55 (WS-GMARCHI), 192.168.1.2 (GATEWAY)"
+                title="Target IP: 192.168.1.10 (SRV-MAIL), 192.168.1.55 (WS-GMAGRI), 192.168.1.2 (GATEWAY)"
               >
                 <AlertTriangle className="w-3 h-3 text-[hsl(var(--status-warning))] mt-0.5" />
                 <div>
@@ -246,7 +246,7 @@ const Index = () => {
               <div className="flex items-start gap-1 p-1 bg-muted">
                 <XCircle className="w-3 h-3 text-[hsl(var(--status-corrupt))] mt-0.5" />
                 <div>
-                  <p className="font-bold">File EDEN.DAT</p>
+                  <p className="font-bold">File ***.DAT</p>
                   <p className="text-muted-foreground text-[9px] font-mono select-all">
                     Err: <span className="text-[hsl(var(--status-danger))]">53415645204D45</span> [CORRUPT]
                   </p>
@@ -340,7 +340,7 @@ const Index = () => {
         <RetroPanel header="Chi Siamo">
           <div className="text-[11px] space-y-2">
             <p>
-              Fondata nel 1̵̏͆͜9̴̝͑̀9̵̧̪̐͝8̸̮̅̈́, CoolPlant Corporation è diventata rapidamente un punto di riferimento
+              Fondata nel 1998, CoolPlant Corporation è diventata rapidamente un punto di riferimento
               nel panorama italiano della sicurezza informatica.
             </p>
             <p>
@@ -367,18 +367,21 @@ const Index = () => {
       {/* --- LOG DI SISTEMA (CON INDIZIO PRINCIPALE) --- */}
       <RetroPanel header="📋 Log di Sistema [Ultimi Eventi]" className="mt-4">
         <div className="retro-panel-inset p-2 font-mono text-[9px] bg-foreground/5 max-h-32 overflow-y-auto">
-          <p className="text-muted-foreground">[24/12/2001 07:45:23] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> Accesso non autorizzato - Piano 15</p>
-          <p className="text-muted-foreground">[24/12/2001 07:44:58] <span className="text-[hsl(var(--status-warning))]">WARNING:</span> Tentativo login fallito - user: admin</p>
-          <p className="text-muted-foreground">[24/12/2001 07:30:12] <span className="text-[hsl(var(--status-corrupt))]">ERROR:</span> File EDEN_BACKUP.DAT - Checksum non valido</p>
-          <p className="text-muted-foreground">[24/12/2001 07:15:00] <span className="text-[hsl(var(--status-online))]">INFO:</span> Scheduled task: Morning_Check eseguito</p>
-          
-          {/* INDIZIO PRINCIPALE PER IL GIOCATORE */}
-          <p className="text-muted-foreground">[24/12/2001 03:22:41] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> IDS Alert - Possibile intrusione rilevata (Ref. Ticket #2313)</p>
-          
-          <p className="text-muted-foreground">[24/12/2001 02:00:00] <span className="text-[hsl(var(--status-corrupt))]">ERROR:</span> Backup notturno fallito - Settore disco corrotto</p>
-          <p className="text-muted-foreground">[23/12/2001 23:59:59] <span className="text-[hsl(var(--status-online))]">INFO:</span> Ultimo backup valido completato</p>
-          <p className="text-muted-foreground">[23/12/2001 18:30:00] <span className="text-[hsl(var(--status-online))]">INFO:</span> D.Bellapianta logged in - Piano 15</p>
-        </div>
+  {/* MOMENTI CRITICI DELL'OMICIDIO */}
+  <p className="text-muted-foreground">[24/12/2001 07:47:15] <span className="text-[hsl(var(--status-danger))]">FATAL:</span> Corpo trovato - Piano 15 [D.Bellapianta]</p>
+  <p className="text-muted-foreground">[24/12/2001 07:45:25] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> CAM-15 OFFLINE - Piano 15</p>
+  <p className="text-muted-foreground">[24/12/2001 07:45:25] <span className="text-[hsl(var(--status-danger))]">INFO:</span> Foto salvata con successo!</p>
+  <p className="text-muted-foreground">[24/12/2001 07:45:23] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> Accesso forzato - Piano 15 [DOOR BREACH]</p>
+  
+  {/* BRUTE FORCE SIMULTANEO */}
+  <p className="text-muted-foreground">[24/12/2001 07:45:24] <span className="text-[hsl(var(--status-danger))]">CRITICAL:</span> IDS Alert - Brute force rilevato</p>
+  <p className="text-muted-foreground">[24/12/2001 07:44:58] <span className="text-[hsl(var(--status-warning))]">WARNING:</span> Login fallito - admin [3 tentativi]</p>
+  
+  {/* CEO ULTIMI MOVIMENTI */}
+  <p className="text-muted-foreground">[24/12/2001 07:30:45] <span className="text-[hsl(var(--status-corrupt))]">ERROR:</span> Stampa documento - Piano 15</p>
+  <p className="text-muted-foreground">[24/12/2001 07:28:33] <span className="text-[hsl(var(--status-online))]">INFO:</span> D.Bellapianta accesso - Piano 15</p>
+</div>
+
         <div className="flex justify-between items-center mt-1">
           {/* GUIDA PER IL GIOCATORE */}
           <p className="text-[9px] text-muted-foreground">
