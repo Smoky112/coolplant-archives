@@ -14,6 +14,7 @@ interface FileSystem {
     downloadable?: boolean;
   };
 }
+import { setEdenTried } from '@/lib/terminalState';
 
 const fileSystem: FileSystem = {
   "/": {
@@ -766,6 +767,7 @@ const Terminal = () => {
 
       case "eden":
       case "unlock":
+        setEdenTried(true)
         addToHistory([
           "▓▓▓ TENTATIVO DI ACCESSO NON AUTORIZZATO ▓▓▓",
           "",
@@ -773,7 +775,7 @@ const Terminal = () => {
           "IP: 192.168.1.???",
           "Data: 24/12/2001 07:45",
           "",
-          "L'amministratore e' stato notificato.",
+          "Chiave mancante: ***** .",
           "[ERRORE: Amministratore non raggiungibile]",
           "",
         ]);

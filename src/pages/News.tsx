@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { edenTried } from "@/lib/terminalState"; // Assicurati che questo percorso sia corretto!
 
 interface NewsItem {
   id: number;
@@ -30,7 +31,8 @@ const News = () => {
   const [email, setEmail] = useState("");
   const itemsPerPage = 3;
 
-  const newsItems: NewsItem[] = [
+  // 1. Definiamo le news standard (pubbliche)
+  const baseNewsItems: NewsItem[] = [
     {
       id: 1,
       date: "20/12/2001",
@@ -218,7 +220,7 @@ PROCEDURA DI AGGIORNAMENTO:
 3. Lanciare setup.exe come Administrator
 4. Riavviare servizi CoolPlant DLP Agent
 
-SUPPORTO: Per assistenza tecnica contattare support@coolplant.it o chiamare il numero verde 800-COOLPLA`,
+SUPPORTO: Per assistenza tecnica contattare [support@coolplant.it](mailto:support@coolplant.it) o chiamare il numero verde 800-COOLPLA`,
       highlight: false,
     },
     {
@@ -374,6 +376,41 @@ Prossimo evento: Smau Milano, 18-22 ottobre 2001`,
     },
   ];
 
+  // 2. Definiamo la news segreta
+  const extraEdenNews: NewsItem = {
+    id: 999, // ID alto per evitare conflitti
+    date: "24/12/2001",
+    month: "Dicembre 2001",
+    title: "⚠️ ALERT: Violazione di sicurezza",
+    author: "SYSTEM",
+    category: "URGENTE",
+    content: "Rilevato tentativo di intrusione non autorizzato nei server EDEN. Protocollo di sicurezza attivato.",
+    fullContent: `⚠️ ALERT DI SICUREZZA - LIVELLO CRITICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Data: 24/12/2001
+Ora: 07:45:00
+Sorgente: Terminale Amministratore
+
+È stato rilevato un tentativo di accesso forzato all'archivio protetto EDEN.
+
+Dettagli incidente:
+- Tentativo di bypass autenticazione
+- Codice errore: ERR_ACCESS_DENIED_L5
+- IP Tracciato: INTERNO
+
+[NOTA AUTOMATICA]: I log suggeriscono che l'utente stia cercando informazioni sul "Progetto EDEN".
+Si consiglia di verificare i file corrotti nella directory /BACKUP.
+
+STATO SISTEMA: COMPROMESSO`,
+    highlight: true,
+  };
+
+  // 3. Uniamo le news in base al flag globale
+  // Se edenTried è true, mettiamo la news segreta IN CIMA (o dove preferisci)
+  const newsItems = edenTried 
+    ? [extraEdenNews, ...baseNewsItems] 
+    : baseNewsItems;
+
   const categories = ["Tutti", "Infrastruttura", "Partnership", "Certificazioni", "Servizi", "Prodotti", "Eventi"];
   
   const archives = [
@@ -392,6 +429,7 @@ Prossimo evento: Smau Milano, 18-22 ottobre 2001`,
 
   // Filter news
   const filteredNews = newsItems.filter((news) => {
+    // Se è la news segreta, la mostriamo sempre se siamo in "Tutti" o se la categoria matcha (anche se "URGENTE" non è nella lista standard, in "Tutti" appare)
     const categoryMatch = selectedCategory === "Tutti" || news.category === selectedCategory;
     const monthMatch = !selectedMonth || news.month === selectedMonth;
     return categoryMatch && monthMatch;

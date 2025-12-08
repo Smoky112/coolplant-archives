@@ -158,9 +158,6 @@ const Index = () => {
                   <RetroButton>Richiedi Info</RetroButton>
                 </Link>
                 <Link to="/terminal">
-                  <RetroButton className="bg-[hsl(220,30%,15%)] text-[hsl(120,100%,65%)] border-[hsl(120,50%,30%)]">
-                    💻 Accedi al Terminale
-                  </RetroButton>
                 </Link>
               </div>
             </div>
