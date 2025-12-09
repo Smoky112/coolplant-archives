@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import RetroLayout from "@/layouts/RetroLayout";
 import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface FileSystem {
   [key: string]: {
@@ -541,6 +542,7 @@ Dicembre 2001
 
 const Terminal = () => {
   const navigate = useNavigate();
+  const { isTerminalAuthorized } = useAuth();
   const [history, setHistory] = useState<string[]>([
     "CoolPlant Corporation - Sistema Legacy",
     "Windows 2000 Server [Versione 5.00.2195]",
@@ -782,6 +784,19 @@ const Terminal = () => {
         break;
 
       case "access_eden_241201":
+        if (!isTerminalAuthorized()) {
+          addToHistory([
+            "",
+            "▓▓▓ ACCESSO NEGATO ▓▓▓",
+            "",
+            "Sessione utente non autorizzata.",
+            "Effettuare login con credenziali valide.",
+            "",
+            "[ERRORE: Livello accesso insufficiente]",
+            "",
+          ]);
+          break;
+        }
         addToHistory([
           "",
           "▓▓▓ CODICE DI EMERGENZA RICONOSCIUTO ▓▓▓",
@@ -798,20 +813,86 @@ const Terminal = () => {
         }, 4000);
         break;
       case "/firewall":
-         addToHistory([
+      case "repair":
+      case "restore":
+        if (!isTerminalAuthorized()) {
+          addToHistory([
+            "",
+            "▓▓▓ ACCESSO NEGATO ▓▓▓",
+            "",
+            "Sessione utente non autorizzata.",
+            "Effettuare login con credenziali valide.",
+            "",
+            "[ERRORE: Livello accesso insufficiente]",
+            "",
+          ]);
+          break;
+        }
+        addToHistory([
+          "",
+          "▓▓▓ Protocollo ripristino attivato ▓▓▓",
+          "",
+          "Sistemi disponibili per ripristino:",
+          "  /server-farm    - Ripristina Server Farm",
+          "  /soc-monitor    - Ripristina SOC Monitor",
+          "  /firewall       - Ripristina Firewall",
+          "  /backup         - Ripristina Backup",
+          "  /auth-server    - Ripristina Auth Server",
+          "",
+          "Digitare il percorso del sistema da ripristinare.",
+          "",
+        ]);
+        break;
+      
+      case "/server-farm":
+        if (!isTerminalAuthorized()) {
+          addToHistory(["", "▓▓▓ ACCESSO NEGATO - Login richiesto ▓▓▓", ""]);
+          break;
+        }
+        addToHistory(["", "Reindirizzamento a Server Farm...", ""]);
+        setTimeout(() => navigate("/server-farm"), 2000);
+        break;
+        
+      case "/soc-monitor":
+        if (!isTerminalAuthorized()) {
+          addToHistory(["", "▓▓▓ ACCESSO NEGATO - Login richiesto ▓▓▓", ""]);
+          break;
+        }
+        addToHistory(["", "Reindirizzamento a SOC Monitor...", ""]);
+        setTimeout(() => navigate("/soc-monitor"), 2000);
+        break;
+        
+      case "/backup":
+        if (!isTerminalAuthorized()) {
+          addToHistory(["", "▓▓▓ ACCESSO NEGATO - Login richiesto ▓▓▓", ""]);
+          break;
+        }
+        addToHistory(["", "Reindirizzamento a Backup System...", ""]);
+        setTimeout(() => navigate("/backup"), 2000);
+        break;
+        
+      case "/auth-server":
+        if (!isTerminalAuthorized()) {
+          addToHistory(["", "▓▓▓ ACCESSO NEGATO - Login richiesto ▓▓▓", ""]);
+          break;
+        }
+        addToHistory(["", "Reindirizzamento a Auth Server...", ""]);
+        setTimeout(() => navigate("/auth-server"), 2000);
+        break;
+        
+      case "firewall":
+        if (!isTerminalAuthorized()) {
+          addToHistory(["", "▓▓▓ ACCESSO NEGATO - Login richiesto ▓▓▓", ""]);
+          break;
+        }
+        addToHistory([
           "",
           "▓▓▓ Protocollo firewall disattivato ▓▓▓",
           "",
-          "Rindirizzamento ripristino firewall...",
-          "Caricamento archivio classificato...",
-          "",
-          "[AVVISO: Connessione non sicura]",
-          "[AVVISO: Tracciamento IP attivo]",
+          "Reindirizzamento ripristino firewall...",
           "",
         ]);
-        setTimeout(() => {
-          navigate("/Firewall");
-        }, 4000);
+        setTimeout(() => navigate("/firewall"), 2000);
         break;
 
       case "6024857":
