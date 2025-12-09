@@ -350,12 +350,6 @@ const News = () => {
             <DialogTitle className="text-[12px] font-bold flex items-center gap-2">
               📄 {selectedNews?.title}
             </DialogTitle>
-            <button 
-              onClick={() => setSelectedNews(null)}
-              className="hover:bg-black/20 p-0.5"
-            >
-              <X className="w-4 h-4" />
-            </button>
           </div>
           
           {selectedNews && (

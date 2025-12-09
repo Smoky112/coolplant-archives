@@ -14,12 +14,12 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { baseNewsItems, incidentNews, backupNews, NewsItem } from "@/lib/newsData";
 import {
-  systemsRestored,
   getServerFarmStatus,
   getSOCMonitorStatus,
   getFirewallStatus,
   getBackupStatus,
   getAuthServerStatus,
+  areAllSystemsRestored,
 } from "@/lib/systemState";
 
 import RetroLayout from "@/layouts/RetroLayout";
@@ -34,11 +34,28 @@ const Index = () => {
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   // Stati dei sistemi
-  const serverFarm = getServerFarmStatus(systemsRestored);
-  const socMonitor = getSOCMonitorStatus(systemsRestored);
-  const firewall = getFirewallStatus(systemsRestored);
-  const backup = getBackupStatus(systemsRestored);
-  const authServer = getAuthServerStatus(systemsRestored);
+  const [systemsRestored, setSystemsRestored] = useState(false);
+  const [serverFarm, setServerFarm] = useState(getServerFarmStatus());
+  const [socMonitor, setSocMonitor] = useState(getSOCMonitorStatus());
+  const [firewall, setFirewall] = useState(getFirewallStatus());
+  const [backup, setBackup] = useState(getBackupStatus());
+  const [authServer, setAuthServer] = useState(getAuthServerStatus());
+
+  // Aggiorna stati quando la pagina diventa visibile
+  useEffect(() => {
+    const updateStatuses = () => {
+      setSystemsRestored(areAllSystemsRestored());
+      setServerFarm(getServerFarmStatus());
+      setSocMonitor(getSOCMonitorStatus());
+      setFirewall(getFirewallStatus());
+      setBackup(getBackupStatus());
+      setAuthServer(getAuthServerStatus());
+    };
+    
+    updateStatuses();
+    window.addEventListener("focus", updateStatuses);
+    return () => window.removeEventListener("focus", updateStatuses);
+  }, []);
 
   // News per la homepage (ultime 5)
   const homeNews: NewsItem[] = [
