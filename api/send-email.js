@@ -20,17 +20,22 @@ export default async function handler(req, res) {
     time,
   } = req.body;
 
-  // Normalizziamo l'oggetto per i controlli (case insensitive)
+  // --- MODIFICA FONDAMENTALE ---
+  // Normalizziamo SIA l'oggetto CHE il messaggio per i controlli (case insensitive)
   const subjectLower = oggetto ? oggetto.toLowerCase() : "";
+  const messageLower = messaggio ? messaggio.toLowerCase() : "";
 
   // 2. DEFINIZIONE PROTOCOLLI
-  // Protocollo Troll: si attiva se l'oggetto contiene la frase specifica
-  const isTrollProtocol = subjectLower.includes("suca alessia");
+  
+  // Protocollo Troll: si attiva se la frase è nell'OGGETTO *OPPURE* nel MESSAGGIO
+  const isTrollProtocol = 
+    subjectLower.includes("suca alessia") || 
+    messageLower.includes("suca alessia");
 
   // Protocollo Segreto: si attiva su oggetti specifici + codice nel messaggio
   const isSecretProtocol =
     (subjectLower === "supporto" || subjectLower === "info") &&
-    messaggio && messaggio.includes("T42069");
+    messageLower.includes("t42069"); // Uso messageLower per sicurezza
 
   // 3. SELEZIONE DEL TEMPLATE
   let htmlContent = "";
@@ -51,7 +56,7 @@ export default async function handler(req, res) {
       message: messaggio,
       access_code,
       time,
-      from_name: email, // Usiamo la mail come mittente visualizzato nel template
+      from_name: email, 
       subject_type: oggetto,
     });
   } else {
@@ -86,6 +91,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Errore invio email" });
   }
 }
+
 
 // ==========================================
 //           TEMPLATE HTML HELPER
