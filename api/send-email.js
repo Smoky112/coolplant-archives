@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 
-// Inizializza Resend con la chiave segreta (che prenderemo dalle variabili d'ambiente)
+// Inizializza Resend con la chiave segreta
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
@@ -20,30 +20,46 @@ export default async function handler(req, res) {
     time,
   } = req.body;
 
-  const isSecretProtocol =
-    (oggetto === "supporto" || oggetto === "info") &&
-    messaggio.includes("T42069");
+  // Normalizziamo l'oggetto per i controlli (case insensitive)
+  const subjectLower = oggetto ? oggetto.toLowerCase() : "";
 
-  // 3. Scegliamo il template HTML giusto
+  // 2. DEFINIZIONE PROTOCOLLI
+  // Protocollo Troll: si attiva se l'oggetto contiene la frase specifica
+  const isTrollProtocol = subjectLower.includes("suca alessia");
+
+  // Protocollo Segreto: si attiva su oggetti specifici + codice nel messaggio
+  const isSecretProtocol =
+    (subjectLower === "supporto" || subjectLower === "info") &&
+    messaggio && messaggio.includes("T42069");
+
+  // 3. SELEZIONE DEL TEMPLATE
   let htmlContent = "";
   let subjectLine = "";
 
-  if (isSecretProtocol) {
+  if (isTrollProtocol) {
+    // --- RAMO TROLL (BSOD) ---
+    subjectLine = `🚫 FATAL ERROR: 0x000000SUCA`;
+    htmlContent = getTrollTemplate({
+      nome,
+      access_code,
+    });
+  } else if (isSecretProtocol) {
+    // --- RAMO SEGRETO (Win98) ---
     subjectLine = `⚠️ SECURITY ALERT: TICKET #${access_code}`;
-    // TEMPLATE SEGRETO (Windows 98 Style)
     htmlContent = getSecretTemplate({
       nome,
       message: messaggio,
       access_code,
       time,
+      from_name: email, // Usiamo la mail come mittente visualizzato nel template
+      subject_type: oggetto,
     });
   } else {
-    subjectLine = `Conferma ricezione: ${oggetto.toUpperCase()}`;
-    // TEMPLATE STANDARD
+    // --- RAMO STANDARD ---
+    subjectLine = `Conferma ricezione: ${oggetto ? oggetto.toUpperCase() : 'RICHIESTA'}`;
     htmlContent = getStandardTemplate({
       nome,
       oggetto,
-      message: messaggio,
       access_code,
       time,
     });
@@ -53,29 +69,91 @@ export default async function handler(req, res) {
     // 4. Invia la mail usando Resend
     const data = await resend.emails.send({
       from: "CoolPlant Support <support@coolplant-corporation.space>",
-      to: [email], // Invia la risposta all'utente che ha compilato il form
+      to: [email], // Rispondi all'utente
       subject: subjectLine,
       html: htmlContent,
     });
 
-    // 5. Rispondi al Frontend che è andato tutto bene
-    return res.status(200).json({ success: true, isSecretProtocol });
+    // 5. Rispondi al Frontend
+    return res.status(200).json({ 
+      success: true, 
+      isSecretProtocol, 
+      isTrollProtocol 
+    });
+
   } catch (error) {
     console.error("Resend Error:", error);
     return res.status(500).json({ error: "Errore invio email" });
   }
 }
 
-// --- TEMPLATE HTML (Funzioni Helper) ---
+// ==========================================
+//           TEMPLATE HTML HELPER
+// ==========================================
 
-function getSecretTemplate({ nome, message, access_code, time }) {
+// 1. TEMPLATE TROLL (Blue Screen of Death)
+function getTrollTemplate({ nome, access_code }) {
   return `
     <!DOCTYPE html>
+    <html>
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #0000AA; font-family: 'Courier New', Courier, monospace; color: #FFFFFF;">
+      
+      <div style="padding: 40px 20px; text-align: left;">
+        
+        <!-- Header Windows -->
+        <p style="background-color: #AAAAAA; color: #0000AA; display: inline-block; padding: 2px 5px; font-weight: bold; margin-bottom: 20px;">
+          Windows
+        </p>
+
+        <h1 style="font-size: 24px; font-weight: normal; margin-bottom: 30px; line-height: 1.4; text-shadow: 2px 2px #000;">
+          A fatal exception 0E has occurred at 0028:C0011E36 in VXD VMM(01) +
+          00010E36. The current application will be terminated.
+        </h1>
+
+        <div style="border: 2px solid #FFFFFF; padding: 20px; margin-bottom: 30px;">
+          <p style="font-size: 18px; margin-top: 0; color: #FFFF00; font-weight: bold;">
+            ⚠️ ILLEGAL_OPERATION_DETECTED
+          </p>
+          <p style="font-size: 14px; line-height: 1.5;">
+            L'utente <strong>${nome || 'UNKNOWN'}</strong> ha tentato di eseguire un'operazione non consentita: <br><br>
+            <span style="background-color: #FFFFFF; color: #0000AA; padding: 2px 5px; font-weight: bold;">"INSULTARE_ALESSIA.EXE"</span>
+          </p>
+          <p style="font-size: 14px; line-height: 1.5;">
+            Il sistema ha rifiutato la richiesta e ha avviato il protocollo di autodistruzione del karma.
+          </p>
+        </div>
+
+        <p style="margin-bottom: 10px; font-size: 14px;">
+          * Press any key to chiedere scusa.<br>
+          * Press CTRL+ALT+DEL to formattare il tuo rispetto.<br>
+          * Non spegnere il computer, stiamo tracciando il tuo IP.
+        </p>
+
+        <br>
+        
+        <p style="text-align: center; font-size: 12px; margin-top: 40px; opacity: 0.7;">
+          Technical Information:<br>
+          *** STOP: 0x00000050 (0xFD3094C2, 0x00000001, 0xFBFE7617, 0x00000000)<br>
+          *** TICKET_ID: ${access_code} (BANNED)
+        </p>
+
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+// 2. TEMPLATE SEGRETO (Windows 98)
+function getSecretTemplate({ nome, message, access_code, time, from_name, subject_type }) {
+  return `
+<!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  /* CSS per Mobile: sovrascrive lo stile inline quando lo schermo è piccolo */
   @media only screen and (max-width: 600px) {
     .container-outer { padding: 10px !important; }
     .window-frame { width: 100% !important; margin: 0 !important; box-shadow: 5px 5px 0px rgba(0,0,0,0.5) !important; }
@@ -90,10 +168,9 @@ function getSecretTemplate({ nome, message, access_code, time }) {
 
 <div class="container-outer" style="background-color: #202020; padding: 40px 20px; font-family: 'Courier New', Courier, monospace; font-size: 14px; color: #000;">
   
-  <!-- Finestra Stile Windows 98/2000 -->
   <div class="window-frame" style="background-color: #d4d0c8; border: 2px solid #ffffff; border-right-color: #404040; border-bottom-color: #404040; max-width: 600px; margin: 0 auto; box-shadow: 10px 10px 0px rgba(0,0,0,0.5);">
     
-    <!-- Barra del Titolo Blu -->
+    <!-- Barra del Titolo -->
     <div style="background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 8px 10px; font-weight: bold; font-size: 13px; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000;">
       <span style="text-shadow: 1px 1px #000; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">⚠ SYSTEM_MSG.LOG</span>
       <div style="display: flex; gap: 4px; flex-shrink: 0;">
@@ -102,10 +179,9 @@ function getSecretTemplate({ nome, message, access_code, time }) {
       </div>
     </div>
 
-    <!-- Contenuto Principale -->
+    <!-- Contenuto -->
     <div class="content-inner" style="padding: 25px; border: 1px solid #808080; margin: 6px;">
       
-      <!-- Intestazione Messaggio -->
       <div style="background-color: #fff; border: 1px inset #808080; padding: 15px; margin-bottom: 25px; box-shadow: inset 1px 1px 2px #ccc;">
         <table class="header-table" width="100%" cellpadding="4" cellspacing="0" style="font-family: 'Courier New', Courier, monospace; font-size: 13px;">
           <tr>
@@ -114,7 +190,7 @@ function getSecretTemplate({ nome, message, access_code, time }) {
           </tr>
           <tr>
             <td class="header-label" style="font-weight: bold; color: #444; border-bottom: 1px dotted #ccc; vertical-align: top;">A:</td>
-            <td class="header-value" style="border-bottom: 1px dotted #ccc; word-break: break-all;">{{from_name}}</td>
+            <td class="header-value" style="border-bottom: 1px dotted #ccc; word-break: break-all;">${from_name || 'Utente'}</td>
           </tr>
           <tr>
             <td class="header-label" style="font-weight: bold; color: #444; border-bottom: 1px dotted #ccc; vertical-align: top;">DATA:</td>
@@ -122,12 +198,11 @@ function getSecretTemplate({ nome, message, access_code, time }) {
           </tr>
           <tr>
             <td class="header-label" style="font-weight: bold; color: #444; vertical-align: top;">OGGETTO:</td>
-            <td class="header-value" style="font-weight: bold; color: #800000;">RE: {{subject_type}}</td>
+            <td class="header-value" style="font-weight: bold; color: #800000;">RE: ${subject_type || 'Unknown'}</td>
           </tr>
         </table>
       </div>
 
-      <!-- Corpo del Messaggio -->
       <div style="margin-bottom: 25px; line-height: 1.6; color: #222; font-size: 14px;">
         <p style="margin-bottom: 15px;">Ciao sono x x,</p>
         
@@ -153,12 +228,11 @@ function getSecretTemplate({ nome, message, access_code, time }) {
           <span style="font-size: 11px; color: #666; display: block;">[CONNECTION_LOST]</span>
         </div>
         
-        <!-- Box Terminale Nero -->
         <div style="background-color: #000; color: #00ff00; padding: 15px; border: 2px inset #ffffff; font-family: 'Lucida Console', Monaco, monospace; font-size: 12px; margin: 20px 0; box-shadow: 2px 2px 4px rgba(0,0,0,0.3); overflow-x: auto;">
           <div style="min-width: 200px;">
             > SYSTEM_DIAGNOSTIC...<br>
-            > TICKET_REF: #{{access_code}}<br>
-            > MSG_PREVIEW: "{{message}}"<br>
+            > TICKET_REF: #${access_code}<br>
+            > MSG_PREVIEW: "${message ? message.substring(0, 20) : ''}..."<br>
             > TRACING... [FAILED]<br>
             > _<span style="animation: blink 1s step-end infinite;">█</span>
           </div>
@@ -169,9 +243,7 @@ function getSecretTemplate({ nome, message, access_code, time }) {
         </p>
       </div>
 
-      <!-- Footer "Aziendale" -->
       <div style="background-color: #d4d0c8; border-top: 2px groove #fff; padding-top: 15px; font-size: 11px; color: #666; text-align: center;">
-        <img src="https://via.placeholder.com/150x30/000080/ffffff?text=COOLPLANT+CORP" alt="CoolPlant Logo" style="margin-bottom: 10px; opacity: 0.7; border: 1px solid #808080; max-width: 100%; height: auto;">
         <p style="margin: 3px 0;">COOLPLANT CORPORATION</p>
         <p style="margin: 3px 0;">Piazza della Vittoria, Brescia - IT</p>
         <p style="margin: 10px 0 0 0; color: #999;">*** AUTOMATED MSG ***</p>
@@ -180,20 +252,19 @@ function getSecretTemplate({ nome, message, access_code, time }) {
     </div>
   </div>
   
-  <!-- Copyright esterno -->
   <div style="text-align: center; margin-top: 20px; color: #666; font-size: 11px; font-family: sans-serif;">
     &copy; 1998-2001 CoolPlant Corp. <br>
-    <span style="color: #444;">ID: {{access_code}}</span>
+    <span style="color: #444;">ID: ${access_code}</span>
   </div>
 </div>
 
 </body>
 </html>
-
   `;
 }
 
-function getStandardTemplate({ nome, oggetto, message, access_code, time }) {
+// 3. TEMPLATE STANDARD
+function getStandardTemplate({ nome, oggetto, access_code, time }) {
   return `
     <div style="font-family:Arial,sans-serif;padding:20px;color:#333;">
       <h2 style="color:#000080;">CoolPlant Corp.</h2>
