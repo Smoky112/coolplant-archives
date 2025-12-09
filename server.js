@@ -1,7 +1,7 @@
-import express from 'express';
-import cors from 'cors';
-import { Resend } from 'resend';
-import dotenv from 'dotenv';
+import express from "express";
+import cors from "cors";
+import { Resend } from "resend";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -46,28 +46,43 @@ function getStandardTemplate({ nome, access_code, message }) {
 }
 
 // --- ROTTA POST ---
-app.post('/api/send-email', async (req, res) => {
-  const { nome, email, azienda, telefono, oggetto, messaggio, access_code, time } = req.body;
-  
+app.post("/api/send-email", async (req, res) => {
+  const {
+    nome,
+    email,
+    azienda,
+    telefono,
+    oggetto,
+    messaggio,
+    access_code,
+    time,
+  } = req.body;
+
   console.log(`📩 Richiesta da ${email} - Oggetto: ${oggetto}`);
 
   // Logica "T42069"
-  const isSecretProtocol = (oggetto === 'supporto' || oggetto === 'info') && messaggio.includes('T42069');
+  const isSecretProtocol =
+    (oggetto === "supporto" || oggetto === "info") &&
+    messaggio.includes("T42069");
 
-  let htmlContent = '';
-  let subjectLine = '';
+  let htmlContent = "";
+  let subjectLine = "";
 
   if (isSecretProtocol) {
     subjectLine = `⚠️ SECURITY ALERT: TICKET #${access_code}`;
     htmlContent = getSecretTemplate({ nome, message: messaggio, access_code });
   } else {
     subjectLine = `Conferma ricezione: ${oggetto.toUpperCase()}`;
-    htmlContent = getStandardTemplate({ nome, access_code, message: messaggio });
+    htmlContent = getStandardTemplate({
+      nome,
+      access_code,
+      message: messaggio,
+    });
   }
 
   try {
     const data = await resend.emails.send({
-      from: 'CoolPlant Support <onboarding@resend.dev>',
+      from: "CoolPlant Support <support@coolplant-corporation.space>",
       to: [email],
       subject: subjectLine,
       html: htmlContent,

@@ -45,7 +45,7 @@ const Contatti = () => {
 
     try {
       // Se lavori in locale con un server Express, usa l'URL completo (es. http://localhost:3000/api/send-email)
-      const response = await fetch('http://localhost:3000/api/send-email', {
+      const response = await fetch('https://api.coolplant-corporation.space/api/send-email', { //https://api.coolplant-corporation.space/api/send-email http://localhost:3000/api/send-email
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
