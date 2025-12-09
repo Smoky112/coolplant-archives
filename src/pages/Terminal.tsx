@@ -1066,11 +1066,12 @@ const Terminal = () => {
               ATTENZIONE: Questo sistema è rimasto inattivo dal 24/12/2001.
             </p>
             <p>
-              Alcuni file risultano corrotti o inaccessibili. La cartella EDEN
-              richiede autorizzazione di Livello 5.
+              Alcuni file risultano corrotti o inaccessibili. 
             </p>
             <p className="text-muted-foreground">
-              Per recuperare dati corrotti, contattare il supporto tecnico.
+              Per recuperare dati corrotti, ripristinare il backup dei dati
+              Invia il comando ""Da aggiungere"".
+              <p className="text-muted-foreground"></p>
               [ERRORE: Supporto non disponibile]
             </p>
           </div>

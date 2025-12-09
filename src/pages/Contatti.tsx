@@ -4,35 +4,97 @@ import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import emailjs from '@emailjs/browser';
+import { env } from "process";
+
+const SERVICE_ID = import.meta.env.VITE_EMAIL_SERVICE_ID || "";
+const PUBLIC_KEY = import.meta.env.VITE_EMAIL_PUBLIC_KEY || "";
+
+// Mappa degli oggetti ai Template ID di EmailJS
+// Crea 4 template diversi su EmailJS se vuoi messaggi diversi, 
+// oppure usa lo stesso ID se il template è generico.
+const TEMPLATE_IDS = {
+  info: "template_general_info",       // Template per Info generiche
+  preventivo: "template_quote_request", // Template per Preventivi
+  supporto: "template_tech_support",    // Template per Supporto
+  partnership: "template_partnership",  // Template per Partnership
+  altro: "template_h0glqft"        // Fallback
+};
 
 const Contatti = () => {
+  const [isSending, setIsSending] = useState(false);
   const [formData, setFormData] = useState({
     nome: "",
     azienda: "",
     email: "",
     telefono: "",
-    oggetto: "",
+    oggetto: "", // Valori: 'info', 'preventivo', 'supporto', 'partnership', 'altro'
     messaggio: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Messaggio inviato",
-      description: "Grazie per averci contattato. Risponderemo entro 24 ore lavorative.",
-    });
-    setFormData({
-      nome: "",
-      azienda: "",
-      email: "",
-      telefono: "",
-      oggetto: "",
-      messaggio: "",
-    });
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+   const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSending(true);
+
+    // 1. Seleziona il Template ID corretto in base all'oggetto
+    // @ts-ignore (ignora errore ts sulle chiavi dinamiche per semplicità)
+    const selectedTemplateId = TEMPLATE_IDS[formData.oggetto] || TEMPLATE_IDS.altro;
+
+    // Genera dati "finti" per la scena
+    const ticketCode = "TKT-" + Math.floor(Math.random() * 10000);
+    const currentTime = new Date().toLocaleString('it-IT');
+
+     const templateParams = {
+      from_name: formData.nome,
+      from_email: formData.email,
+      company: formData.azienda || "N/A",
+      phone: formData.telefono || "N/A",
+      subject_type: formData.oggetto.toUpperCase(),
+      message: formData.messaggio,
+      
+      access_code: ticketCode,
+      time: currentTime,
+      
+      is_urgent: formData.oggetto === 'supporto' ? 'YES' : 'NO'
+    };
+
+    // 3. Invia Email
+    emailjs.send(SERVICE_ID, selectedTemplateId, templateParams, PUBLIC_KEY)
+      .then((response) => {
+        console.log('SUCCESS!', response.status, response.text);
+        
+        toast({
+          title: "Messaggio inviato con successo!",
+          description: `Grazie ${formData.nome}, abbiamo ricevuto la tua richiesta di ${formData.oggetto}.`,
+          variant: "default", // O "success" se hai configurato un tema custom
+        });
+
+        // Reset Form
+        setFormData({
+          nome: "",
+          azienda: "",
+          email: "",
+          telefono: "",
+          oggetto: "",
+          messaggio: "",
+        });
+      })
+      .catch((err) => {
+        console.error('FAILED...', err);
+        
+        toast({
+          title: "Errore di trasmissione",
+          description: "Impossibile inviare il messaggio. Controlla la connessione o riprova più tardi.",
+          variant: "destructive",
+        });
+      })
+      .finally(() => {
+        setIsSending(false);
+      });
   };
 
   return (
@@ -53,7 +115,9 @@ const Contatti = () => {
                     value={formData.nome}
                     onChange={handleChange}
                     required
-                    className="retro-input w-full"
+                    disabled={isSending}
+                    className="retro-input w-full disabled:opacity-50"
+                    placeholder="Mario Rossi"
                   />
                 </div>
                 <div>
@@ -65,7 +129,9 @@ const Contatti = () => {
                     name="azienda"
                     value={formData.azienda}
                     onChange={handleChange}
-                    className="retro-input w-full"
+                    disabled={isSending}
+                    className="retro-input w-full disabled:opacity-50"
+                    placeholder="CoolPlant Corp"
                   />
                 </div>
               </div>
@@ -81,7 +147,9 @@ const Contatti = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="retro-input w-full"
+                    disabled={isSending}
+                    className="retro-input w-full disabled:opacity-50"
+                    placeholder="mario@esempio.it"
                   />
                 </div>
                 <div>
@@ -93,7 +161,9 @@ const Contatti = () => {
                     name="telefono"
                     value={formData.telefono}
                     onChange={handleChange}
-                    className="retro-input w-full"
+                    disabled={isSending}
+                    className="retro-input w-full disabled:opacity-50"
+                    placeholder="+39 ..."
                   />
                 </div>
               </div>
@@ -107,9 +177,10 @@ const Contatti = () => {
                   value={formData.oggetto}
                   onChange={handleChange}
                   required
-                  className="retro-input w-full"
+                  disabled={isSending}
+                  className="retro-input w-full disabled:opacity-50"
                 >
-                  <option value="">-- Seleziona --</option>
+                  <option value="">-- Seleziona motivo --</option>
                   <option value="info">Richiesta informazioni</option>
                   <option value="preventivo">Richiesta preventivo</option>
                   <option value="supporto">Supporto tecnico</option>
@@ -127,8 +198,10 @@ const Contatti = () => {
                   value={formData.messaggio}
                   onChange={handleChange}
                   required
+                  disabled={isSending}
                   rows={6}
-                  className="retro-input w-full resize-none"
+                  className="retro-input w-full resize-none disabled:opacity-50"
+                  placeholder="Scrivi qui il tuo messaggio..."
                 />
               </div>
 
@@ -140,14 +213,22 @@ const Contatti = () => {
               </div>
 
               <div className="flex gap-2">
-                <RetroButton type="submit">Invia Messaggio</RetroButton>
-                <RetroButton type="reset">Cancella</RetroButton>
+                <RetroButton type="submit" disabled={isSending}>
+                  {isSending ? "Trasmissione in corso..." : "Invia Messaggio"}
+                </RetroButton>
+                <RetroButton 
+                  type="button" 
+                  onClick={() => setFormData({ nome: "", azienda: "", email: "", telefono: "", oggetto: "", messaggio: "" })}
+                  disabled={isSending}
+                >
+                  Cancella
+                </RetroButton>
               </div>
             </form>
           </RetroPanel>
         </div>
 
-        {/* Contact Info Sidebar */}
+        {/* Contact Info Sidebar (Invariata) */}
         <div className="space-y-4">
           <RetroPanel header="📍 Dove Siamo">
             <div className="space-y-3 text-[11px]">

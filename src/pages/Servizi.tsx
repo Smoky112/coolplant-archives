@@ -261,12 +261,10 @@ const Servizi = () => {
       ],
     },
   ];
-
-  // Funzione per gestire il click sulla riga "Network" (Ultimo indizio EDEN)
   const handleEdenClick = (rowName: string) => {
     if (rowName.startsWith("Network")) {
       alert(
-        "ERRORE DI SISTEMA: Accesso negato al modulo E*** ??.\n\n Contatta l'amministratore tramite T42551!"
+        "ERRORE DI SISTEMA: Accesso negato al modulo E***??.\n\n Inserisci il modulo nel terminale per sbloccare ulteriori informazioni."
       );
     }
   };

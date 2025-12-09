@@ -30,8 +30,8 @@ const Index = () => {
   const navigate = useNavigate();
   
   // --- STATO E GESTIONE POPUP INIZIALE ---
-  const [showIntro, setShowIntro] = useState(true);
-  const [isFadingOut, setIsFadingOut] = useState(false);
+const [showIntro, setShowIntro] = useState(false); 
+const [isFadingOut, setIsFadingOut] = useState(false);
 
   // Stati dei sistemi
   const [systemsRestored, setSystemsRestored] = useState(false);
@@ -68,15 +68,20 @@ const Index = () => {
     navigate(`/news?article=${newsId}`);
   };
 
-  // All'avvio: controlla se l'intro è già stata vista in passato
-  useEffect(() => {
-    const seen = localStorage.getItem("coolplant_intro_seen");
-    // Se è già stata vista (seen === "true"), nascondi subito il popup.
-    // Per testare, puoi rimuovere questa condizione o pulire il localStorage.
-    if (seen === "true") {
-      setShowIntro(false); // Cambiato a true per testare ripetutamente
-    }
-  }, []);
+useEffect(() => {
+  const seen = localStorage.getItem("coolplant_intro_seen");
+  
+  // Se NON è stata vista, aspetta e poi mostra il popup
+  if (seen !== "true") {
+    const timer = setTimeout(() => {
+      setShowIntro(true);
+    }, 500); // 1500ms di latenza (modifica questo numero a piacere)
+
+    // Cleanup del timer se l'utente cambia pagina prima del tempo
+    return () => clearTimeout(timer);
+  }
+}, []);
+
 
   // Blocca lo scroll del body quando il popup è visibile
   useEffect(() => {

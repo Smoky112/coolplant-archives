@@ -234,6 +234,7 @@ export const useAuth = () => {
 export const resetAllGameData = () => {
   // Reset popup home
   localStorage.removeItem("coolplant_popup_dismissed");
+  localStorage.removeItem("coolplant_intro_seen");
   
   // Reset stato sistemi
   localStorage.removeItem("coolplant_server_farm_restored");
