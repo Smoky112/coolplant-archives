@@ -795,7 +795,23 @@ const Terminal = () => {
         ]);
         setTimeout(() => {
           navigate("/eden");
-        }, 2000);
+        }, 4000);
+        break;
+      case "/firewall":
+         addToHistory([
+          "",
+          "▓▓▓ Protocollo firewall disattivato ▓▓▓",
+          "",
+          "Rindirizzamento ripristino firewall...",
+          "Caricamento archivio classificato...",
+          "",
+          "[AVVISO: Connessione non sicura]",
+          "[AVVISO: Tracciamento IP attivo]",
+          "",
+        ]);
+        setTimeout(() => {
+          navigate("/Firewall");
+        }, 4000);
         break;
 
       case "6024857":
