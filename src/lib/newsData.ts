@@ -1,4 +1,3 @@
-// Dati condivisi per le news
 export interface NewsItem {
   id: number;
   date: string;
@@ -9,8 +8,42 @@ export interface NewsItem {
   content: string;
   fullContent: string;
   highlight: boolean;
+  isSecret?: boolean; // Flag per stile speciale (rosso/glitch)
 }
 
+// --- 1. News Segreta (EDEN) ---
+export const secretNews: NewsItem = {
+  id: 999,
+  date: "24/12/2001", //cambiare in data reale
+  month: "Dicembre 2001",
+  title: "⚠️ ALERT: Violazione di sicurezza",
+  author: "SYSTEM",
+  category: "URGENTE",
+  content: "Rilevato tentativo di intrusione non autorizzato nei server EDEN. Protocollo di sicurezza attivato.",
+  fullContent: `⚠️ ALERT DI SICUREZZA - LIVELLO CRITICO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Data: 24/12/2001
+Ora: 07:45:00
+Sorgente: Terminale Amministratore
+
+È stato rilevato un tentativo di accesso forzato all'archivio protetto EDEN.
+
+Dettagli incidente:
+-Server Farm OFFLINE
+-SOC Monitor DEGRADATO
+-Firewall BREACH
+-Backup CORROTTO
+-Auth Server N/D
+
+[NOTA AUTOMATICA]: I log suggeriscono che l'utente stia cercando informazioni sul "Progetto EDEN".
+Sistemi corrotti, ripristinarli è necessario per proseguire nel progetto.
+
+STATO SISTEMA: COMPROMESSO`,
+  highlight: true,
+  isSecret: true
+};
+
+// --- 2. News Standard (Lista completa) ---
 export const baseNewsItems: NewsItem[] = [
   {
     id: 1,
@@ -167,9 +200,195 @@ Il servizio è sviluppato in collaborazione con il nostro team R&D guidato dal D
 Costo servizio: da 2.500.000 Lire/mese per PMI`,
     highlight: false,
   },
+  {
+    id: 6,
+    date: "15/11/2001",
+    month: "Novembre 2001",
+    title: "Aggiornamento piattaforma DLP",
+    author: "Product Team",
+    category: "Prodotti",
+    content: "Rilasciata la versione 3.2 della nostra piattaforma DLP Enterprise con nuove funzionalità di content inspection.",
+    fullContent: `Rilasciata la versione 3.2 della nostra piattaforma DLP Enterprise con nuove funzionalità di content inspection e supporto per i formati Microsoft Office XP.
+
+Tutti i clienti riceveranno l'aggiornamento gratuito.
+
+NOVITÀ VERSIONE 3.2:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Supporto completo Office XP (.docx, .xlsx, .pptx)
+• Nuovo motore OCR per documenti scansionati
+• Fingerprinting avanzato per dati strutturati
+• Policy template per GDPR (in preparazione normativa UE)
+• Console web migliorata con grafici real-time
+• Agent ottimizzato per Windows XP Professional
+
+REQUISITI DI SISTEMA:
+• Server: Windows 2000 Server SP2, 512MB RAM, 20GB HD
+• Client: Windows 98SE/2000/XP, 64MB RAM minimo
+• Database: SQL Server 7.0 o superiore
+
+PROCEDURA DI AGGIORNAMENTO:
+1. Scaricare patch da ftp.coolplant.it/updates/dlp32
+2. Eseguire backup database esistente
+3. Lanciare setup.exe come Administrator
+4. Riavviare servizi CoolPlant DLP Agent
+
+SUPPORTO: Per assistenza tecnica contattare [support@coolplant.it](mailto:support@coolplant.it) o chiamare il numero verde 800-COOLPLA`,
+    highlight: false,
+  },
+  {
+    id: 7,
+    date: "01/11/2001",
+    month: "Novembre 2001",
+    title: "Seminario sulla sicurezza informatica",
+    author: "Formazione",
+    category: "Eventi",
+    content: "Il 15 novembre si è tenuto presso la nostra sede il seminario 'La sicurezza informatica nell'era di Internet' con oltre 100 partecipanti.",
+    fullContent: `Il 15 novembre si è tenuto presso la nostra sede il seminario 'La sicurezza informatica nell'era di Internet' con oltre 100 partecipanti tra IT manager e responsabili sicurezza delle principali aziende bresciane.
+
+PROGRAMMA DELL'EVENTO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+09:00 - Registrazione e welcome coffee
+09:30 - "Lo scenario delle minacce informatiche nel 2001"
+        Relatore: Dott. Davide Bellapianta, CEO CoolPlant
+10:30 - "Implementare una strategia di sicurezza efficace"
+        Relatore: Ing. Lucia Marchetti, Security Consultant
+11:30 - Coffee break
+12:00 - "Case study: proteggere i dati sensibili in azienda"
+        Relatore: Dott. Paolo Vezzoli, SOC Manager
+13:00 - Light lunch e networking
+14:30 - Workshop pratico: "Vulnerability Assessment hands-on"
+16:30 - Q&A e chiusura lavori
+
+FEEDBACK PARTECIPANTI:
+• 94% soddisfatti o molto soddisfatti
+• 87% interessati a ulteriori eventi
+• 65% richiesta preventivi per servizi
+
+Il prossimo seminario è previsto per febbraio 2002 con focus su "Compliance e normative: prepararsi al futuro della privacy".
+
+[NOTA: Durante il seminario il CEO ha accennato brevemente al Progetto EDEN definendolo "il futuro della protezione dati". Nessun dettaglio aggiuntivo è stato fornito ai partecipanti.]
+
+Foto dell'evento disponibili su: http://intranet.coolplant.local/gallery/sem_nov2001`,
+    highlight: false,
+  },
+  {
+    id: 8,
+    date: "25/10/2001",
+    month: "Ottobre 2001",
+    title: "Apertura nuova sede operativa Milano",
+    author: "Ufficio Stampa",
+    category: "Infrastruttura",
+    content: "CoolPlant espande la propria presenza con una nuova sede operativa a Milano, in zona Porta Nuova.",
+    fullContent: `CoolPlant Corporation espande la propria presenza con una nuova sede operativa a Milano, in zona Porta Nuova.
+
+DETTAGLI SEDE MILANO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Indirizzo: Via Melchiorre Gioia 45, 20124 Milano
+• Superficie: 400 mq open space
+• Personale: 12 consulenti senior
+• Servizi: Consulenza, Pre-sales, Account Management
+
+La sede milanese permetterà di servire meglio i clienti del Nord Italia e di rafforzare la nostra presenza nel mercato enterprise lombardo.
+
+Inaugurazione ufficiale prevista per il 10 novembre 2001.`,
+    highlight: false,
+  },
+  {
+    id: 9,
+    date: "15/10/2001",
+    month: "Ottobre 2001",
+    title: "Nuovo contratto con Banca Popolare di Brescia",
+    author: "Sales",
+    category: "Partnership",
+    content: "Firmato importante contratto pluriennale con Banca Popolare di Brescia per servizi di sicurezza gestita.",
+    fullContent: `Firmato importante contratto pluriennale con Banca Popolare di Brescia per servizi di sicurezza gestita.
+
+SCOPE DEL CONTRATTO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Monitoraggio SOC 24/7 per tutte le filiali
+• Vulnerability Assessment trimestrale
+• Penetration Testing annuale
+• Formazione personale IT bancario
+• Incident Response con SLA garantito
+
+Valore contratto: 1.2 miliardi di lire su 3 anni.
+
+"Siamo orgogliosi di questa partnership che conferma la fiducia del settore bancario nei nostri servizi" - Davide Bellapianta, CEO`,
+    highlight: false,
+  },
+  {
+    id: 10,
+    date: "01/10/2001",
+    month: "Ottobre 2001",
+    title: "Rilascio CoolGuard Enterprise 2.0",
+    author: "Product Team",
+    category: "Prodotti",
+    content: "Disponibile la nuova versione del nostro prodotto di punta per la protezione endpoint.",
+    fullContent: `Disponibile la nuova versione del nostro prodotto di punta per la protezione endpoint: CoolGuard Enterprise 2.0.
+
+NUOVE FUNZIONALITÀ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Protezione real-time contro virus e worm
+• Firewall personale integrato
+• Content filtering per navigazione web
+• Console centralizzata web-based
+• Supporto Windows XP (beta)
+
+Upgrade gratuito per tutti i clienti con contratto di manutenzione attivo.
+
+Download disponibile su: ftp.coolplant.it/products/coolguard20`,
+    highlight: false,
+  },
+  {
+    id: 11,
+    date: "20/09/2001",
+    month: "Settembre 2001",
+    title: "Attivato servizio di Disaster Recovery",
+    author: "IT Operations",
+    category: "Servizi",
+    content: "Nuovo servizio di Disaster Recovery as a Service per garantire la continuità operativa dei clienti.",
+    fullContent: `Nuovo servizio di Disaster Recovery as a Service per garantire la continuità operativa dei clienti enterprise.
+
+CARATTERISTICHE DEL SERVIZIO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• RPO (Recovery Point Objective): 15 minuti
+• RTO (Recovery Time Objective): 4 ore
+• Replica dati su Data Center secondario
+• Test di failover semestrale incluso
+• Documentazione procedure disaster recovery
+
+Il servizio utilizza tecnologia di replica sincrona su fibra ottica dedicata verso il nostro sito di DR situato a Verona.
+
+Costo: a partire da 5.000.000 Lire/mese`,
+    highlight: false,
+  },
+  {
+    id: 12,
+    date: "05/09/2001",
+    month: "Settembre 2001",
+    title: "CoolPlant al Security Summit Roma",
+    author: "Marketing",
+    category: "Eventi",
+    content: "Grande successo per CoolPlant al Security Summit di Roma con oltre 500 visitatori allo stand.",
+    fullContent: `Grande successo per CoolPlant Corporation al Security Summit di Roma (3-5 settembre 2001).
+
+HIGHLIGHTS DELL'EVENTO:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Oltre 500 visitatori allo stand CoolPlant
+• 45 demo prodotto effettuate
+• 120 lead qualificati raccolti
+• Speech del CEO su "Il futuro della Data Protection"
+
+Il CEO Davide Bellapianta ha tenuto un keynote molto apprezzato sulla visione strategica della sicurezza informatica per il decennio 2000-2010.
+
+"L'Italia deve investire di più in sicurezza informatica. Il gap con gli altri paesi europei è ancora significativo." - D. Bellapianta
+
+Prossimo evento: Smau Milano, 18-22 ottobre 2001`,
+    highlight: false,
+  },
 ];
 
-// News speciale dell'incidente
+// --- News speciali aggiuntive (extra) ---
 export const incidentNews: NewsItem = {
   id: 0,
   date: "24/12/2001",
@@ -204,7 +423,6 @@ NOTA SISTEMA: Ultimo accesso registrato - Badge #001 (D. Bellapianta) ore 06:45`
   highlight: true,
 };
 
-// News backup corrotto
 export const backupNews: NewsItem = {
   id: -1,
   date: "23/12/2001",
