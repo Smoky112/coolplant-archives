@@ -4,22 +4,9 @@ import RetroPanel from "@/components/RetroPanel";
 import RetroButton from "@/components/RetroButton";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import emailjs from '@emailjs/browser';
-import { env } from "process";
 
-const SERVICE_ID = import.meta.env.VITE_EMAIL_SERVICE_ID || "";
-const PUBLIC_KEY = import.meta.env.VITE_EMAIL_PUBLIC_KEY || "";
-
-// Mappa degli oggetti ai Template ID di EmailJS
-// Crea 4 template diversi su EmailJS se vuoi messaggi diversi, 
-// oppure usa lo stesso ID se il template è generico.
-const TEMPLATE_IDS = {
-  info: "template_general_info",       // Template per Info generiche
-  preventivo: "template_quote_request", // Template per Preventivi
-  supporto: "template_tech_support",    // Template per Supporto
-  partnership: "template_partnership",  // Template per Partnership
-  altro: "template_h0glqft"        // Fallback
-};
+// NOTA: Non importiamo più emailjs.
+// La logica di invio è spostata nel backend (API route).
 
 const Contatti = () => {
   const [isSending, setIsSending] = useState(false);
@@ -36,65 +23,78 @@ const Contatti = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-   const handleSubmit = (e: React.FormEvent) => {
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
-
-    // 1. Seleziona il Template ID corretto in base all'oggetto
-    // @ts-ignore (ignora errore ts sulle chiavi dinamiche per semplicità)
-    const selectedTemplateId = TEMPLATE_IDS[formData.oggetto] || TEMPLATE_IDS.altro;
 
     // Genera dati "finti" per la scena
     const ticketCode = "TKT-" + Math.floor(Math.random() * 10000);
     const currentTime = new Date().toLocaleString('it-IT');
 
-     const templateParams = {
-      from_name: formData.nome,
-      from_email: formData.email,
-      company: formData.azienda || "N/A",
-      phone: formData.telefono || "N/A",
-      subject_type: formData.oggetto.toUpperCase(),
-      message: formData.messaggio,
-      
+    // Prepara il payload per l'API
+    const payload = {
+      nome: formData.nome,
+      email: formData.email,
+      azienda: formData.azienda || "N/A",
+      telefono: formData.telefono || "N/A",
+      oggetto: formData.oggetto,
+      messaggio: formData.messaggio,
       access_code: ticketCode,
       time: currentTime,
-      
-      is_urgent: formData.oggetto === 'supporto' ? 'YES' : 'NO'
     };
 
-    // 3. Invia Email
-    emailjs.send(SERVICE_ID, selectedTemplateId, templateParams, PUBLIC_KEY)
-      .then((response) => {
-        console.log('SUCCESS!', response.status, response.text);
-        
+    try {
+      // Se lavori in locale con un server Express, usa l'URL completo (es. http://localhost:3000/api/send-email)
+      const response = await fetch('http://localhost:3000/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Errore durante l\'invio');
+      }
+
+      // Controlla se il backend ci segnala che era un messaggio "segreto"
+      // (La logica T42069 ora è gestita nel backend per sicurezza, ma il backend ce lo comunica)
+      if (data.isSecretProtocol) {
+         toast({
+          title: "⚠️ ERRORE SISTEMA CRITICO",
+          description: "Messaggio intercettato dal server interno. Controlla la tua casella di posta.",
+          variant: "destructive", 
+        });
+      } else {
         toast({
           title: "Messaggio inviato con successo!",
           description: `Grazie ${formData.nome}, abbiamo ricevuto la tua richiesta di ${formData.oggetto}.`,
-          variant: "default", // O "success" se hai configurato un tema custom
+          variant: "default",
         });
+      }
 
-        // Reset Form
-        setFormData({
-          nome: "",
-          azienda: "",
-          email: "",
-          telefono: "",
-          oggetto: "",
-          messaggio: "",
-        });
-      })
-      .catch((err) => {
-        console.error('FAILED...', err);
-        
-        toast({
-          title: "Errore di trasmissione",
-          description: "Impossibile inviare il messaggio. Controlla la connessione o riprova più tardi.",
-          variant: "destructive",
-        });
-      })
-      .finally(() => {
-        setIsSending(false);
+      // Reset Form
+      setFormData({
+        nome: "",
+        azienda: "",
+        email: "",
+        telefono: "",
+        oggetto: "",
+        messaggio: "",
       });
+
+    } catch (err) {
+      console.error('FAILED...', err);
+      toast({
+        title: "Errore di trasmissione",
+        description: "Impossibile inviare il messaggio. Controlla la connessione o riprova più tardi.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (

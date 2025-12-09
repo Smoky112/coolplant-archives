@@ -38,6 +38,8 @@ Dettagli incidente:
 [NOTA AUTOMATICA]: I log suggeriscono che l'utente stia cercando informazioni sul "Progetto EDEN".
 Sistemi corrotti, ripristinarli è necessario per proseguire nel progetto.
 
+Inviare il ticket di emergenza T42069 per essere ricontattati dal team di sicurezza.
+
 STATO SISTEMA: COMPROMESSO`,
   highlight: true,
   isSecret: true
