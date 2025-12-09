@@ -1,38 +1,60 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 // Inizializza Resend con la chiave segreta (che prenderemo dalle variabili d'ambiente)
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
   // 1. Permetti solo richieste POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { nome, email, azienda, telefono, oggetto, messaggio, access_code, time } = req.body;
+  const {
+    nome,
+    email,
+    azienda,
+    telefono,
+    oggetto,
+    messaggio,
+    access_code,
+    time,
+  } = req.body;
 
   // 2. LOGICA SEGRETA (Protocollo T42069)
   // Controlliamo se è un messaggio "speciale" lato server
-  const isSecretProtocol = (oggetto === 'supporto' || oggetto === 'info') && messaggio.includes('T42069');
+  const isSecretProtocol =
+    (oggetto === "supporto" || oggetto === "info") &&
+    messaggio.includes("T42069");
 
   // 3. Scegliamo il template HTML giusto
-  let htmlContent = '';
-  let subjectLine = '';
+  let htmlContent = "";
+  let subjectLine = "";
 
   if (isSecretProtocol) {
     subjectLine = `⚠️ SECURITY ALERT: TICKET #${access_code}`;
     // TEMPLATE SEGRETO (Windows 98 Style)
-    htmlContent = getSecretTemplate({ nome, message: messaggio, access_code, time });
+    htmlContent = getSecretTemplate({
+      nome,
+      message: messaggio,
+      access_code,
+      time,
+    });
   } else {
     subjectLine = `Conferma ricezione: ${oggetto.toUpperCase()}`;
     // TEMPLATE STANDARD
-    htmlContent = getStandardTemplate({ nome, oggetto, message: messaggio, access_code, time });
+    htmlContent = getStandardTemplate({
+      nome,
+      oggetto,
+      message: messaggio,
+      access_code,
+      time,
+    });
   }
 
   try {
     // 4. Invia la mail usando Resend
     const data = await resend.emails.send({
-      from: 'CoolPlant Support <onboarding@resend.dev>', // In produzione userai il tuo dominio verificato
+      from: "CoolPlant Support <support@coolplant-corporation.space>",
       to: [email], // Invia la risposta all'utente che ha compilato il form
       subject: subjectLine,
       html: htmlContent,
@@ -41,8 +63,8 @@ export default async function handler(req, res) {
     // 5. Rispondi al Frontend che è andato tutto bene
     return res.status(200).json({ success: true, isSecretProtocol });
   } catch (error) {
-    console.error('Resend Error:', error);
-    return res.status(500).json({ error: 'Errore invio email' });
+    console.error("Resend Error:", error);
+    return res.status(500).json({ error: "Errore invio email" });
   }
 }
 
