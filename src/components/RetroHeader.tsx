@@ -1,9 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Shield, Lock, Database, Server } from "lucide-react";
+import { Shield, Lock, Database, Server, User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const RetroHeader = () => {
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   const navItems = [
     { path: "/", label: "Home" },
@@ -32,9 +34,7 @@ const RetroHeader = () => {
   useEffect(() => {
     // Controlla ogni 4 secondi se far partire un glitch
     const interval = setInterval(() => {
-
-
-    const isGameActive = localStorage.getItem("glitchStated") === "true";
+      const isGameActive = localStorage.getItem("glitchStated") === "true";
 
       // Se il gioco NON è attivo, non fare nulla
       if (!isGameActive) return;  
@@ -86,6 +86,26 @@ const RetroHeader = () => {
             <Server className="w-3 h-3" />
             <span>SOC 24/7</span>
           </div>
+          
+          {/* User indicator */}
+          {user && (
+            <div className="flex items-center gap-2 ml-4 pl-4 border-l border-current/30">
+              <Link
+                to="/login"
+                className="flex items-center gap-1 hover:opacity-80 transition-opacity"
+              >
+                <User className="w-4 h-4" />
+                <span className="font-bold">{user.data.nome.split(" ")[0]}</span>
+              </Link>
+              <button
+                onClick={logout}
+                className="hover:opacity-80 transition-opacity"
+                title="Disconnetti"
+              >
+                <LogOut className="w-3 h-3" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
