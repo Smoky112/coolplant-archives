@@ -11,6 +11,11 @@ import Login from "./pages/Login";
 import Terminal from "./pages/Terminal";
 import Dipendenti from "./pages/Dipendenti";
 import Eden from "./pages/Eden";
+import ServerFarm from "./pages/ServerFarm";
+import SOCMonitor from "./pages/SOCMonitor";
+import FirewallPage from "./pages/FirewallPage";
+import BackupPage from "./pages/BackupPage";
+import AuthServerPage from "./pages/AuthServerPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +35,11 @@ const App = () => (
           <Route path="/terminal" element={<Terminal />} />
           <Route path="/dipendenti" element={<Dipendenti />} />
           <Route path="/eden" element={<Eden />} />
+          <Route path="/server-farm" element={<ServerFarm />} />
+          <Route path="/soc-monitor" element={<SOCMonitor />} />
+          <Route path="/firewall" element={<FirewallPage />} />
+          <Route path="/backup" element={<BackupPage />} />
+          <Route path="/auth-server" element={<AuthServerPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
