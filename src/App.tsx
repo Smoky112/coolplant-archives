@@ -16,6 +16,7 @@ import SOCMonitor from "./pages/SOCMonitor";
 import FirewallPage from "./pages/FirewallPage";
 import BackupPage from "./pages/BackupPage";
 import AuthServerPage from "./pages/AuthServerPage";
+import DataCenter from "./pages/DataCenter";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/firewall" element={<FirewallPage />} />
           <Route path="/backup" element={<BackupPage />} />
           <Route path="/auth-server" element={<AuthServerPage />} />
+          <Route path="/datacenter" element={<DataCenter />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
