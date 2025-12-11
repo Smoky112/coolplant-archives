@@ -210,7 +210,7 @@ function getSecretTemplate({ nome, message, access_code, time, from_name, subjec
       </div>
 
       <div style="margin-bottom: 25px; line-height: 1.6; color: #222; font-size: 14px;">
-        <p style="margin-bottom: 15px;">Ciao sono x x,</p>
+        <p style="margin-bottom: 15px;">Ciao sono Tagliaferri Lorenzo,</p>
         
         <div style="border-left: 4px solid #808080; padding-left: 15px; margin-bottom: 20px; font-style: italic; color: #444;">
           "Questa email è stata pre-registrata in data <strong style="background-color: #ffffcc; padding: 0 3px;">28/12/2001</strong> e lasciata segreta fino ad ora."
@@ -225,7 +225,7 @@ function getSecretTemplate({ nome, message, access_code, time, from_name, subjec
         </p>
         
         <p style="margin-bottom: 20px;">
-          Se sei qui per capire cos'è successo prova a inviare il comando <span style="display: inline-block; background-color: #000; color: #0f0; padding: 2px 6px; font-family: 'Lucida Console', monospace; font-weight: bold;">qualcosa</span> nel terminale sperando che ancora funzioni... buona fortuna.
+          Se sei qui per capire cos'è successo prova a inviare il comando <span style="display: inline-block; background-color: #000; color: #0f0; padding: 2px 6px; font-family: 'Lucida Console', monospace; font-weight: bold;">CENERI-DEL-SE**U*U</span> nel terminale sperando che ancora funzioni... buona fortuna.
         </p>
 
         <div style="border-top: 1px dashed #808080; border-bottom: 1px dashed #808080; padding: 10px 0; margin: 20px 0; text-align: center; background-color: #e8e8e8;">
