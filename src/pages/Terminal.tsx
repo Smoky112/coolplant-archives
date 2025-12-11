@@ -947,10 +947,12 @@ const Terminal = () => {
           "▓▓▓ CHIAVI DATA CENTER VERIFICATE ▓▓▓",
           "",
           "Accesso Piano -1 autorizzato...",
-          "Reindirizzamento a Server Farm...",
+          "Avvio protocollo FNAF...",
+          "",
+          "'They're waiting for you...'",
           "",
         ]);
-        setTimeout(() => navigate("/server-farm"), 2000);
+        setTimeout(() => navigate("/datacenter"), 2000);
         break;
 
       case "6024857":
