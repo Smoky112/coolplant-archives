@@ -542,7 +542,7 @@ Dicembre 2001
 
 const Terminal = () => {
   const navigate = useNavigate();
-  const { isTerminalAuthorized } = useAuth();
+  const { isTerminalAuthorized, user } = useAuth();
   const [history, setHistory] = useState<string[]>([
     "CoolPlant Corporation - Sistema Legacy",
     "Windows 2000 Server [Versione 5.00.2195]",
@@ -893,6 +893,64 @@ const Terminal = () => {
           "",
         ]);
         setTimeout(() => navigate("/firewall"), 2000);
+        break;
+
+      case "ceneri-del-seppuku":
+        addToHistory([
+          "",
+          "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓",
+          "▓                                              ▓",
+          "▓   ░░░ PROTOCOLLO CENERI ATTIVATO ░░░         ▓",
+          "▓                                              ▓",
+          "▓   'I always come back...'                    ▓",
+          "▓                                              ▓",
+          "▓   Connessione ai sistemi legacy...           ▓",
+          "▓   Recupero dati dal turno di notte...        ▓",
+          "▓                                              ▓",
+          "▓   ████████████████████████ 100%              ▓",
+          "▓                                              ▓",
+          "▓   CREDENZIALI RECUPERATE:                    ▓",
+          "▓   ─────────────────────────                  ▓",
+          "▓   Username: l.tagliaferri                    ▓",
+          "▓   Password: tarnished87                      ▓",
+          "▓   ─────────────────────────                  ▓",
+          "▓                                              ▓",
+          "▓   'It's me.'                                 ▓",
+          "▓                                              ▓",
+          "▓   [!] Avviso: Le anime non trovano riposo    ▓",
+          "▓   quando i loro segreti rimangono sepolti... ▓",
+          "▓                                              ▓",
+          "▓   'Was it me? It's always been me.'          ▓",
+          "▓                                              ▓",
+          "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓",
+          "",
+        ]);
+        break;
+
+      case "datacenter":
+      case "/datacenter":
+        if (user?.username !== "l.tagliaferri") {
+          addToHistory([
+            "",
+            "▓▓▓ ACCESSO NEGATO ▓▓▓",
+            "",
+            "Comando riservato al CTO.",
+            "Chiavi fisiche Data Center richieste.",
+            "",
+            "[ERRORE: Solo l.tagliaferri può accedere]",
+            "",
+          ]);
+          break;
+        }
+        addToHistory([
+          "",
+          "▓▓▓ CHIAVI DATA CENTER VERIFICATE ▓▓▓",
+          "",
+          "Accesso Piano -1 autorizzato...",
+          "Reindirizzamento a Server Farm...",
+          "",
+        ]);
+        setTimeout(() => navigate("/server-farm"), 2000);
         break;
 
       case "6024857":

@@ -59,6 +59,7 @@ const Login = () => {
   // Pagina utente loggato
   if (user) {
     const { data } = user;
+    const isCTO = (data as any).isCTO;
     
     // Pannello debug per utente debug
     if (data.isDebug) {
@@ -151,6 +152,164 @@ const Login = () => {
                   <p>edenTried: {localStorage.getItem("edenTried") || "null"}</p>
                 </div>
               </RetroPanel>
+            </RetroPanel>
+          </div>
+        </RetroLayout>
+      );
+    }
+
+    // Profilo speciale CTO - Tagliaferri Lorenzo
+    if (isCTO) {
+      return (
+        <RetroLayout>
+          <div className="max-w-4xl mx-auto">
+            <RetroPanel header={`🔧 Profilo CTO - ${data.nome}`}>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span className="text-[10px] font-bold">Livello Accesso: {data.livello}</span>
+                </div>
+                <RetroButton onClick={handleLogout} size="sm" className="flex items-center gap-1">
+                  <LogOut className="w-3 h-3" />
+                  Disconnetti
+                </RetroButton>
+              </div>
+
+              {/* Quote Elden Ring */}
+              <div className="mb-4 p-3 border border-dashed border-muted-foreground/40 text-center">
+                <p className="text-[10px] italic text-muted-foreground">
+                  "Rise, Tarnished. Claim your destiny in the Lands Between..."
+                </p>
+                <p className="text-[8px] text-muted-foreground/60 mt-1">- Nota personale</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Informazioni Personali */}
+                <RetroPanel header="📋 Dati Personali" variant="inset">
+                  <div className="space-y-2 text-[10px]">
+                    <div className="flex items-center gap-2">
+                      <User className="w-3 h-3" />
+                      <span className="font-bold">Nome:</span> {data.nome}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Building className="w-3 h-3" />
+                      <span className="font-bold">Ruolo:</span> {data.ruolo}
+                    </div>
+                    <div className="text-[9px] text-muted-foreground italic ml-5">
+                      31 anni - Responsabile infrastrutture tecniche
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3 h-3" />
+                      <span className="font-bold">Email:</span> {data.email}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-3 h-3" />
+                      <span className="font-bold">Telefono:</span> {data.telefono}
+                    </div>
+                    <div>
+                      <span className="font-bold">Interno:</span> {data.interno}
+                    </div>
+                    <div>
+                      <span className="font-bold">Ufficio:</span> {data.ufficio}
+                    </div>
+                  </div>
+                </RetroPanel>
+
+                {/* Responsabilità */}
+                <RetroPanel header="⚙️ Responsabilità" variant="inset">
+                  <div className="space-y-2 text-[10px]">
+                    <div className="retro-panel-inset p-2">
+                      <p className="font-bold text-[9px] text-primary">SUPERVISIONE SOC</p>
+                      <p className="text-[9px] text-muted-foreground">Piano -1 - Security Operations Center</p>
+                    </div>
+                    <div className="retro-panel-inset p-2">
+                      <p className="font-bold text-[9px] text-primary">SERVER FARM</p>
+                      <p className="text-[9px] text-muted-foreground">Infrastrutture critiche aziendali</p>
+                    </div>
+                    <div className="retro-panel-inset p-2 border border-[hsl(var(--status-warning))]">
+                      <p className="font-bold text-[9px] text-[hsl(var(--status-warning))]">🔑 CHIAVI DATA CENTER</p>
+                      <p className="text-[9px] text-muted-foreground">Accesso fisico Piano -1</p>
+                      <p className="text-[8px] text-muted-foreground/70 italic mt-1">
+                        "Le chiavi che aprono la porta dell'abisso..."
+                      </p>
+                    </div>
+                  </div>
+                </RetroPanel>
+
+                {/* File Personali */}
+                <RetroPanel header="📁 File Personali" variant="inset">
+                  <div className="space-y-1">
+                    {data.files.map((file, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-1 hover:bg-muted/50 text-[9px]">
+                        <div className="flex items-center gap-1">
+                          <FileText className="w-3 h-3" />
+                          <span className="font-mono">{file.nome}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-muted-foreground">{file.size}</span>
+                          <span className={`px-1 text-[8px] font-bold ${
+                            file.stato === "CLASSIFICATO" 
+                              ? "bg-destructive text-destructive-foreground" 
+                              : file.stato === "PERSONALE"
+                                ? "bg-primary/30 text-primary"
+                                : "bg-muted"
+                          }`}>
+                            {file.stato}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </RetroPanel>
+
+                {/* Note Personali */}
+                <RetroPanel header="📝 Note Personali [PRIVATO]" variant="inset">
+                  <div className="space-y-2 text-[9px]">
+                    <div className="retro-panel-inset p-2">
+                      <p className="text-muted-foreground italic">
+                        "Strano, timido, parlo poco. Ma osservo tutto."
+                      </p>
+                    </div>
+                    <div className="retro-panel-inset p-2 border border-primary/30">
+                      <p className="font-bold text-[8px] text-primary mb-1">🎮 INTERESSI PERSONALI:</p>
+                      <p className="text-muted-foreground">
+                        Elden Ring completato al 100%<br/>
+                        "Maidenless behavior detected"
+                      </p>
+                    </div>
+                    <div className="retro-panel-inset p-2 opacity-70">
+                      <p className="text-[8px] text-muted-foreground">
+                        "Five Nights... qualcuno ha notato attività strane nei server di notte.
+                        Animatronics? No, solo backup automatici. Forse."
+                      </p>
+                      <p className="text-[8px] text-primary/70 mt-1 italic">
+                        "It's me."
+                      </p>
+                    </div>
+                  </div>
+                </RetroPanel>
+              </div>
+
+              {/* Comando esclusivo */}
+              <div className="mt-4 p-3 border border-primary/50 bg-primary/5">
+                <div className="flex items-start gap-2">
+                  <Key className="w-4 h-4 text-primary mt-0.5" />
+                  <div>
+                    <p className="text-[10px] font-bold text-primary">COMANDO TERMINALE ESCLUSIVO:</p>
+                    <p className="text-[10px] font-mono bg-muted px-2 py-1 mt-1 inline-block">DATACENTER</p>
+                    <p className="text-[9px] text-muted-foreground mt-1">
+                      Utilizza le tue chiavi fisiche per accedere alla Server Farm dal terminale.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Easter Egg FNAF */}
+              <div className="mt-4 text-center">
+                <p className="text-[8px] text-muted-foreground/40 hover:text-primary/60 transition-colors cursor-default">
+                  "Was it me? It's always been me." - Turno notturno, 12:00 AM
+                </p>
+              </div>
             </RetroPanel>
           </div>
         </RetroLayout>
