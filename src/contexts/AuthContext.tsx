@@ -30,6 +30,7 @@ export interface UserData {
   accessiRecenti: AccessLog[];
   note: string;
   isDebug?: boolean;
+  isCTO?: boolean;
 }
 
 // Database utenti hardcoded (simulazione sistema legacy)
@@ -142,6 +143,35 @@ export const USERS_DATABASE: Record<string, UserData> = {
     ],
     note: "Primo a rispondere all'emergenza del 24/12. Testimone chiave.",
   },
+  "l.tagliaferri": {
+    password: "tarnished87",
+    nome: "Tagliaferri Lorenzo",
+    ruolo: "CTO - Chief Technology Officer",
+    livello: "5 - Accesso Infrastrutture",
+    email: "l.tagliaferri@coolplant.it",
+    telefono: "+39 030 555 0013",
+    interno: "1300",
+    ufficio: "Piano 13 - Direzione Tecnica",
+    dataAssunzione: "08/11/1997",
+    stipendio: "€ 125.000 / anno",
+    bonus: "€ 28.000 (2001)",
+    contoAziendale: "IT55 M054 2811 1010 0000 0567 890",
+    codFiscale: "TGLLNZ70S31B157P",
+    files: [
+      { nome: "DATACENTER_KEYS.dat", size: "2 KB", stato: "CLASSIFICATO" },
+      { nome: "SOC_ARCHITECTURE.vsd", size: "4.2 MB", stato: "RISERVATO" },
+      { nome: "SERVER_FARM_MAP.pdf", size: "1.8 MB", stato: "TECNICO" },
+      { nome: "ELDEN_NOTES.txt", size: "12 KB", stato: "PERSONALE" },
+      { nome: "NIGHT_SHIFT_LOG.doc", size: "234 KB", stato: "INTERNO" },
+    ],
+    accessiRecenti: [
+      { data: "23/12/2001 23:45", azione: "Logout sistema", ip: "192.168.1.13" },
+      { data: "23/12/2001 19:30", azione: "Accesso Data Center P.-1", ip: "192.168.1.13" },
+      { data: "23/12/2001 08:00", azione: "Login sistema", ip: "192.168.1.13" },
+    ],
+    note: "Chiavi fisiche Data Center Piano -1. Timido, riservato. Ultimo accesso registrato: 23/12/2001 - Non presente il 24/12.",
+    isCTO: true,
+  },
   "debug": {
     password: "debug2024",
     nome: "Debug Admin",
@@ -164,7 +194,7 @@ export const USERS_DATABASE: Record<string, UserData> = {
 };
 
 // Lista utenti che possono usare comandi speciali nel terminale
-export const TERMINAL_AUTHORIZED_USERS = ["d.bellapianta", "g.rossi", "l.bianchi", "debug"];
+export const TERMINAL_AUTHORIZED_USERS = ["d.bellapianta", "g.rossi", "l.bianchi", "l.tagliaferri", "debug"];
 
 interface AuthContextType {
   user: { username: string; data: UserData } | null;
