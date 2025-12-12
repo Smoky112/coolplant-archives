@@ -20,7 +20,6 @@ const shuffleArray = (array: string[]) => {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  // Ensure it's not already solved
   if (JSON.stringify(shuffled) === JSON.stringify(CORRECT_SEQUENCE)) {
     [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
   }
@@ -38,14 +37,12 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [status, setStatus] = useState('UNSTABLE');
 
-  // Timer
   useEffect(() => {
     if (isSuccess || timeLeft <= 0) return;
     const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
     return () => clearInterval(timer);
   }, [isSuccess, timeLeft]);
 
-  // Check solution
   useEffect(() => {
     if (JSON.stringify(wires) === JSON.stringify(CORRECT_SEQUENCE)) {
       setIsSuccess(true);
@@ -54,7 +51,6 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
     }
   }, [wires, onSuccess]);
 
-  // Show hint after 3 errors
   useEffect(() => {
     if (errors >= 3) setShowHint(true);
   }, [errors]);
@@ -96,7 +92,6 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
         [newWires[selectedSlot], newWires[index]] = [newWires[index], newWires[selectedSlot]];
         setWires(newWires);
         
-        // Check if both positions are now correct
         const slot1Correct = newWires[selectedSlot] === CORRECT_SEQUENCE[selectedSlot];
         const slot2Correct = newWires[index] === CORRECT_SEQUENCE[index];
         
@@ -116,37 +111,32 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
 
   const isWireCorrect = (index: number) => wires[index] === CORRECT_SEQUENCE[index];
 
+  const resetPuzzle = () => {
+    setWires(shuffleArray([...CORRECT_SEQUENCE]));
+    setTimeLeft(90);
+    setErrors(0);
+    setShowHint(false);
+    setSelectedSlot(null);
+  };
+
   if (timeLeft <= 0 && !isSuccess) {
     return (
-      <div className="font-mono text-center">
-        <div className="text-red-500 text-2xl mb-4 animate-pulse">⚠️ TIMEOUT - SYSTEM FAILURE ⚠️</div>
-        <button 
-          onClick={() => {
-            setWires(shuffleArray([...CORRECT_SEQUENCE]));
-            setTimeLeft(90);
-            setErrors(0);
-            setShowHint(false);
-          }}
-          className="retro-button"
-        >
-          RETRY
-        </button>
+      <div className="text-center py-8">
+        <div className="text-destructive text-lg mb-4 animate-pulse">⚠️ TIMEOUT - SYSTEM FAILURE ⚠️</div>
+        <button onClick={resetPuzzle} className="retro-button">RETRY</button>
       </div>
     );
   }
 
   return (
-    <div className={`font-mono relative ${isShaking ? 'animate-shake' : ''}`}>
-      {/* Scanlines overlay */}
-      <div className="absolute inset-0 pointer-events-none bg-scanlines opacity-20" />
-      
+    <div className={`relative ${isShaking ? 'animate-shake' : ''}`}>
       {/* Sparks effect */}
       {showSparks && (
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none z-10">
           {[...Array(12)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-yellow-400 rounded-full animate-spark"
+              className="absolute w-1 h-1 bg-[hsl(var(--status-warning))] rounded-full animate-spark"
               style={{
                 left: `${20 + Math.random() * 60}%`,
                 top: `${30 + Math.random() * 40}%`,
@@ -158,35 +148,35 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
       )}
 
       {/* Terminal frame */}
-      <div className="border-2 border-green-500/70 bg-black/95 p-4 text-green-400 max-w-md mx-auto">
+      <div className="retro-panel-inset p-4 bg-[hsl(220,30%,8%)]">
         {/* Header */}
-        <div className="border-b border-green-500/50 pb-2 mb-4">
-          <div className="flex justify-between items-center">
+        <div className="border-b border-[hsl(120,50%,30%)] pb-2 mb-4 font-mono text-[10px]">
+          <div className="flex justify-between items-center text-[hsl(120,100%,50%)]">
             <span>╔══ COOLPLANT EMERGENCY PANEL v1.2 ══╗</span>
           </div>
           <div className="flex justify-between items-center mt-1">
-            <span className="text-red-400 animate-pulse">⚠️ CRITICAL OVERLOAD - REWIRE NOW</span>
-            <span className={`${timeLeft < 20 ? 'text-red-400 animate-pulse' : ''}`}>
+            <span className="text-destructive animate-pulse">⚠️ CRITICAL OVERLOAD - REWIRE NOW</span>
+            <span className={`${timeLeft < 20 ? 'text-destructive animate-pulse' : 'text-[hsl(120,100%,50%)]'}`}>
               [{formatTime(timeLeft)}]
             </span>
           </div>
         </div>
 
         {/* Timer bar */}
-        <div className="h-2 bg-gray-800 mb-4 overflow-hidden">
+        <div className="h-2 bg-muted mb-4 overflow-hidden border border-border">
           <div 
-            className={`h-full transition-all duration-1000 ${timeLeft < 20 ? 'bg-red-500' : 'bg-green-500'}`}
+            className={`h-full transition-all duration-1000 ${timeLeft < 20 ? 'bg-destructive' : 'bg-[hsl(var(--status-online))]'}`}
             style={{ width: `${(timeLeft / 90) * 100}%` }}
           />
         </div>
 
         {/* Hint diagram */}
         {showHint && (
-          <div className="mb-4 p-2 border border-yellow-500/50 bg-yellow-500/10">
-            <div className="text-yellow-400 text-sm glitch-text">
+          <div className="mb-4 p-2 border border-[hsl(var(--status-warning))] bg-[hsl(var(--status-warning)/0.1)] text-[10px] font-mono">
+            <div className="text-[hsl(var(--status-warning))]">
               [CORRUPTED DIAGRAM: R--B--G--Y--P--O]
             </div>
-            <div className="text-xs text-yellow-600 mt-1">
+            <div className="text-[9px] text-muted-foreground mt-1">
               ░░▓▓░ SEQUENCE FRAGMENT DETECTED ░▓▓░░
             </div>
           </div>
@@ -200,12 +190,12 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
               onClick={() => handleSlotClick(index)}
               className={`
                 relative h-16 border-2 cursor-pointer transition-all duration-200
-                ${selectedSlot === index ? 'border-white scale-105' : 'border-green-500/50'}
-                ${isWireCorrect(index) && isSuccess ? 'border-green-400 shadow-[0_0_10px_#22c55e]' : ''}
-                hover:border-green-300
+                ${selectedSlot === index ? 'border-primary scale-105' : 'border-[hsl(120,50%,30%)]'}
+                ${isWireCorrect(index) && isSuccess ? 'border-[hsl(var(--status-online))]' : ''}
+                hover:border-[hsl(120,50%,50%)]
+                bg-[hsl(220,30%,5%)]
               `}
             >
-              {/* Wire SVG */}
               <svg className="w-full h-full" viewBox="0 0 60 40">
                 <defs>
                   <linearGradient id={`wire-${color}-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
@@ -239,8 +229,7 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
                 </text>
               </svg>
               
-              {/* Slot number */}
-              <div className="absolute bottom-0 right-1 text-xs text-green-600">
+              <div className="absolute bottom-0 right-1 text-[9px] text-[hsl(120,50%,40%)] font-mono">
                 {index + 1}
               </div>
             </div>
@@ -248,26 +237,26 @@ export const WirePuzzle = ({ onSuccess }: WirePuzzleProps) => {
         </div>
 
         {/* Status */}
-        <div className="flex justify-between items-center text-sm border-t border-green-500/50 pt-2">
-          <span>
-            {showSparks && <span className="text-yellow-400">[SPARKS] </span>}
-            STATUS: <span className={isSuccess ? 'text-green-400' : 'text-red-400'}>[{status}]</span>
+        <div className="flex justify-between items-center text-[10px] border-t border-[hsl(120,50%,30%)] pt-2 font-mono">
+          <span className="text-[hsl(120,100%,50%)]">
+            {showSparks && <span className="text-[hsl(var(--status-warning))]">[SPARKS] </span>}
+            STATUS: <span className={isSuccess ? 'text-[hsl(var(--status-online))]' : 'text-destructive'}>[{status}]</span>
           </span>
-          <span className="text-red-400">ERRORS: {errors}</span>
+          <span className="text-destructive">ERRORS: {errors}</span>
         </div>
 
         {/* Success message */}
         {isSuccess && (
-          <div className="mt-4 text-center animate-pulse">
-            <div className="text-green-400 text-lg">✓ SISTEMA STABILIZZATO</div>
-            <div className="text-green-300">EDEN ONLINE</div>
-            <div className="text-xs text-green-600 mt-2">LOG: Accesso G.Rossi sbloccato</div>
+          <div className="mt-4 text-center animate-pulse font-mono">
+            <div className="text-[hsl(var(--status-online))] text-sm">✓ SISTEMA STABILIZZATO</div>
+            <div className="text-[hsl(120,100%,40%)] text-[11px]">EDEN ONLINE</div>
+            <div className="text-[9px] text-[hsl(120,50%,40%)] mt-2">LOG: Accesso G.Rossi sbloccato</div>
           </div>
         )}
 
         {/* Instructions */}
         {!isSuccess && (
-          <div className="mt-4 text-xs text-green-600 text-center">
+          <div className="mt-4 text-[9px] text-muted-foreground text-center font-mono">
             Clicca due slot per scambiare i fili. Sequenza: R→B→G→Y→P→O
           </div>
         )}
