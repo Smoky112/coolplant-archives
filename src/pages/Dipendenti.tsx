@@ -27,109 +27,151 @@ const Team = () => {
       id: 1,
       name: "Davide",
       surname: "Bellapianta",
-      role: "CEO",
+      role: "CEO e Fondatore",
       department: "Direzione",
       floor: "Piano 15",
       email: "d.bellapianta@coolplant.it",
       phone: "Interno 1500",
       image: "/images/employees/bellapianta.jpg",
-      description: "Fondatore e CEO di CoolPlant Corporation. Guida l'azienda dal 1998 con una visione orientata all'innovazione nella sicurezza dei dati.",
+      description: "Fondatore e CEO di CoolPlant Corporation. Guida l'azienda dal 1998 con una visione orientata all'innovazione nella sicurezza dei dati. Unico con accesso completo al Progetto EDEN.",
       status: "unknown",
       note: "Ultimo accesso: 24/12/2001 07:30 - STATO: NON RAGGIUNGIBILE",
     },
     {
       id: 2,
-      name: "Giulia",
-      surname: "Marchi",
-      role: "CEO ASSISTANT",
-      department: "Direzione",
-      floor: "Piano 15",
-      email: "g.Marchi@coolplant.it",
-      phone: "Interno 1510",
-      image: "/images/employees/trevisan.jpg",
-      description: "Assiste il CEO nelle attività quotidiane e nella gestione degli impegni. Esperta in comunicazione aziendale e relazioni esterne.",
-      status: "???",
+      name: "Lorenzo",
+      surname: "Tagliaferri",
+      role: "CTO",
+      department: "Direzione Tecnica",
+      floor: "Piano 14",
+      email: "l.tagliaferri@coolplant.it",
+      phone: "Interno 1401",
+      image: "/images/employees/tagliaferri.jpg",
+      description: "Responsabile di tutte le infrastrutture tecniche. Supervisiona il SOC e le server farm. Personalità riservata, possiede le chiavi fisiche del Data Center al Piano -1.",
+      status: "active",
+      note: "Attualmente connesso al sistema di emergenza.",
     },
     {
       id: 3,
-      name: "Roberto",
-      surname: "Negri",
-      role: "Security",
-      department: "HR & Security",
-      floor: "Piano 13",
-      email: "a.negri@coolplant.it",
-      phone: "Interno 1300",
-      image: "/images/employees/negri.jpg",
-      description: "Responsabile della sicurezza fisica e delle risorse umane. Coordina le procedure di accesso e garantisce la conformità alle normative aziendali.",
+      name: "Daniela",
+      surname: "Candio",
+      role: "CFO",
+      department: "Amministrazione",
+      floor: "Piano 14",
+      email: "d.candio@coolplant.it",
+      phone: "Interno 1402",
+      image: "/images/employees/candio.jpg",
+      description: "Gestisce budget e contratti commerciali. Ha scoperto recenti irregolarità nei conti aziendali. Una delle poche persone con accesso ai report finanziari riservati.",
       status: "unavailable",
     },
     {
       id: 4,
-      name: "Giuseppe",
-      surname: "Rossi",
-      role: "IT Manager",
-      department: "IT Operations",
-      floor: "Piano 13",
-      email: "g.rossi@coolplant.it",
-      phone: "Interno 1234",
-      image: "/images/employees/rossi.jpg",
-      description: "Gestisce l'infrastruttura IT aziendale e coordina il team di sistemisti. Responsabile dei backup e della manutenzione server.",
-      status: "unavailable",
-      note: "In ferie dal 24/12/2001",
+      name: "Nazary",
+      surname: "Ciola",
+      role: "Responsabile SOC",
+      department: "Security Operations",
+      floor: "Piano -1",
+      email: "n.ciola@coolplant.it",
+      phone: "Interno 0100",
+      image: "/images/employees/ciola.jpg",
+      description: "Capo del team di monitoraggio 24/7. Gestisce gli alert di sicurezza, le intrusioni e ha accesso diretto ai log di sistema.",
+      status: "active",
+      note: "In turno per gestione emergenza server.",
     },
     {
       id: 5,
-      name: "Stefania",
-      surname: "Colombo",
-      role: "COO",
-      department: "Operations",
-      floor: "Piano 12",
-      email: "s.colombo@coolplant.it",
-      phone: "Interno 1200",
-      image: "/images/employees/colombo.jpg",
-      description: "Supervisiona le operazioni quotidiane e coordina i team di lavoro. Garantisce l'efficienza dei processi aziendali.",
+      name: "Francesco",
+      surname: "Griotti",
+      role: "Sistemista Senior",
+      department: "IT Operations",
+      floor: "Piano 13",
+      email: "f.griotti@coolplant.it",
+      phone: "Interno 1301",
+      image: "/images/employees/griotti.jpg",
+      description: "Esperto Windows 2000 Server e SQL. Gestisce l'infrastruttura Exchange e i backup su nastri DAT. Ultimo backup verificato: 23/12/2001.",
       status: "unavailable",
+      note: "Possibili competenze di hacking interno.",
     },
     {
       id: 6,
-      name: "Franco",
-      surname: "Ferretti",
-      role: "Security Manager",
-      department: "SOC",
-      floor: "Piano -1",
-      email: "f.ferretti@coolplant.it",
-      phone: "Interno 0100",
-      image: "/images/employees/ferretti.jpg",
-      description: "Capo del Security Operations Center. Coordina il team di 12 analisti nel monitoraggio H24 delle minacce informatiche.",
-      status: "active",
-      note: "In turno notturno - Ultimo report: 24/12/2001 07:48",
-    },
-    {
-      id: 7,
-      name: "Elena",
-      surname: "Mancini",
-      role: "Compliance Officer",
-      department: "Legal & Compliance",
-      floor: "Piano 11",
-      email: "e.mancini@coolplant.it",
-      phone: "Interno 1100",
-      image: "/images/employees/mancini.jpg",
-      description: "Responsabile della conformità normativa. Specializzata in privacy, GDPR e certificazioni ISO 27001.",
+      name: "Aurora",
+      surname: "Nicolini",
+      role: "Network Admin",
+      department: "IT Operations",
+      floor: "Piano 13",
+      email: "a.nicolini@coolplant.it",
+      phone: "Interno 1302",
+      image: "/images/employees/nicolini.jpg",
+      description: "Responsabile firewall, router Cisco e connettività VPN. Molto vicina alla direzione, monitora tutti gli accessi remoti.",
       status: "unavailable",
     },
     {
-      id: 8,
-      name: "Luca",
-      surname: "Bianchi",
-      role: "Senior Analyst",
-      department: "SOC",
-      floor: "Piano -1",
-      email: "l.bianchi@coolplant.it",
-      phone: "Interno 0101",
-      image: "/images/employees/bianchi.jpg",
-      description: "Analista senior del SOC con specializzazione in threat intelligence e incident response.",
-      status: "active",
+      id: 7,
+      name: "Giulia",
+      surname: "Magri",
+      role: "Assistente CEO",
+      department: "Direzione",
+      floor: "Piano 15",
+      email: "g.magri@coolplant.it",
+      phone: "Interno 1501",
+      image: "/images/employees/magri.jpg",
+      description: "Segretaria di fiducia di Bellapianta. Gestisce l'agenda e possiede le chiavi dell'ufficio al Piano 15. Ultima persona ad aver visto il CEO vivo.",
+      status: "???",
+      note: "Sospetti di relazione personale con la direzione.",
     },
+    {
+      id: 8,
+      name: "Filippo",
+      surname: "Zimolo",
+      role: "HR & Security",
+      department: "Risorse Umane",
+      floor: "Piano 12",
+      email: "f.zimolo@coolplant.it",
+      phone: "Interno 1201",
+      image: "/images/employees/zimolo.jpg",
+      description: "Gestisce badge di accesso, telecamere e controllo dipendenti. Ha accesso ai log degli ingressi e ai file personali di tutto lo staff.",
+      status: "unavailable",
+    },
+    {
+      id: 9,
+      name: "Charlotte",
+      surname: "Dicks",
+      role: "PR & Communication",
+      department: "Marketing",
+      floor: "Piano 11",
+      email: "c.dicks@coolplant.it",
+      phone: "Interno 1105",
+      image: "/images/employees/dicks.jpg",
+      description: "Gestisce la comunicazione esterna e il sito web. Ha ricevuto ordini recenti di censurare notizie riguardanti il progetto EDEN.",
+      status: "unavailable",
+    },
+    {
+      id: 10,
+      name: "Mirko",
+      surname: "Alessandrini",
+      role: "Consulente Esterno",
+      department: "R&D EDEN",
+      floor: "Variabile",
+      email: "m.alessandrini@unibs.it",
+      phone: "Esterno",
+      image: "/images/employees/alessandrini.jpg",
+      description: "Docente universitario e analista dati. Collabora part-time sul Progetto EDEN. Esperto in investigazioni digitali.",
+      status: "active",
+      note: "Accesso remoto rilevato.",
+    },
+    {
+      id: 11,
+      name: "Francesca",
+      surname: "Moretti",
+      role: "Data Analyst Jr",
+      department: "R&D EDEN",
+      floor: "Piano 10",
+      email: "f.moretti@coolplant.it",
+      phone: "Interno 1002",
+      image: "/images/employees/moretti.jpg",
+      description: "Stagista nel progetto EDEN. Analizza dataset sotto supervisione. Ha accesso parziale ad alcuni dati sensibili.",
+      status: "unavailable",
+    }
   ];
 
   const getStatusColor = (status?: string) => {
@@ -161,6 +203,11 @@ const Team = () => {
         return "● N/D";
     }
   };
+
+  // Statistiche calcolate sui nuovi dati
+  const totalEmployees = 156; // Fisso come da lore
+  const activeCount = employees.filter(e => e.status === 'active').length + 3; // +3 turno notte generico
+  const unavailableCount = employees.filter(e => e.status === 'unavailable').length;
 
   return (
     <RetroLayout>
@@ -286,7 +333,7 @@ const Team = () => {
         <RetroPanel header="📊 Statistiche Team">
           <div className="grid grid-cols-2 gap-2 text-[10px]">
             <div className="retro-panel-inset p-2 text-center">
-              <p className="text-[16px] font-bold text-primary">156</p>
+              <p className="text-[16px] font-bold text-primary">{totalEmployees}</p>
               <p className="text-muted-foreground">Dipendenti Totali</p>
             </div>
             <div className="retro-panel-inset p-2 text-center">
@@ -294,11 +341,11 @@ const Team = () => {
               <p className="text-muted-foreground">Analisti SOC</p>
             </div>
             <div className="retro-panel-inset p-2 text-center">
-              <p className="text-[16px] font-bold text-[hsl(var(--status-online))]">23</p>
+              <p className="text-[16px] font-bold text-[hsl(var(--status-online))]">{activeCount}</p>
               <p className="text-muted-foreground">Attivi Ora</p>
             </div>
             <div className="retro-panel-inset p-2 text-center">
-              <p className="text-[16px] font-bold text-[hsl(var(--status-warning))]">3</p>
+              <p className="text-[16px] font-bold text-[hsl(var(--status-warning))]">{unavailableCount}</p>
               <p className="text-muted-foreground">Non Raggiungibili</p>
             </div>
           </div>
@@ -313,7 +360,7 @@ const Team = () => {
               <span className="blink">●</span> Il CEO Davide Bellapianta risulta non raggiungibile dalle ore 07:45 del 24/12/2001.
             </p>
             <p className="text-muted-foreground text-[9px]">
-              Per emergenze contattare il SOC: Interno 0101
+              Per emergenze contattare il SOC: Interno 0100
             </p>
           </div>
         </RetroPanel>

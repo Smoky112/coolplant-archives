@@ -36,10 +36,7 @@ const DataCenter = () => {
     "> CARICAMENTO PROTOCOLLO DI EMERGENZA...",
     "> Piano -1 | DATA CENTER | CoolPlant Corp.",
     "> ATTENZIONE: Alimentazione instabile",
-    "> Le luci del corridoio tremolano...",
-    "> Temperatura: 8°C | Umidità: 45%",
     "> Server EDEN: CRITICO - Richiesto intervento manuale",
-    "> INIZIALIZZAZIONE PANNELLO DI EMERGENZA..."
   ];
 
   // Intro animation
@@ -55,20 +52,22 @@ const DataCenter = () => {
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [phase, introStep]);
+  }, [phase, introStep, introTexts.length]);
 
   const handleWireSuccess = () => {
     toast({
-      title: "Fase 1 Completata",
-      description: "Pannello elettrico stabilizzato. Procedere all'analisi immagini.",
+      title: "ALIMENTAZIONE STABILIZZATA",
+      description: "Patch bay riconnessa. Inizializzazione analisi forense...",
+      className: "bg-green-900 border-green-500 text-green-100"
     });
     setTimeout(() => setPhase('image'), 1500);
   };
 
   const handleImageSuccess = () => {
     toast({
-      title: "Fase 2 Completata", 
-      description: "Codici estratti. Procedere al cruciverba finale.",
+      title: "DATI ESTRATTI",
+      description: "File audio recuperato. Avvio decrittazione finale...",
+      className: "bg-green-900 border-green-500 text-green-100"
     });
     setTimeout(() => setPhase('crossword'), 1500);
   };
@@ -77,8 +76,9 @@ const DataCenter = () => {
     setServerFarmRestored(true);
     setPhase('complete');
     toast({
-      title: "SERVER EDEN RIPRISTINATO",
-      description: "Tutti i sistemi sono stati stabilizzati.",
+      title: "SERVER EDEN ONLINE",
+      description: "Tutti i sistemi sono operativi.",
+      className: "bg-green-900 border-green-500 text-green-100"
     });
   };
 
@@ -88,140 +88,89 @@ const DataCenter = () => {
 
   return (
     <RetroLayout>
-      <div className="max-w-4xl mx-auto space-y-4">
+      <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <RetroPanel header="🖥️ Data Center - Piano -1 - Emergenza">
-          <div className="text-[11px] text-muted-foreground mb-2">
-            Connesso a: COOLPLANT-DC01 | Stato: CRITICO | Data Sistema: 24/12/2001
+          <div className="flex justify-between items-center text-[10px] text-muted-foreground mb-2 font-mono">
+             <span>HOST: COOLPLANT-DC01</span>
+             <span>DATE: 24/12/2001</span>
           </div>
-          <p className="text-[11px]">
-            <span className="text-destructive font-bold">⚠️ ATTENZIONE:</span> Server EDEN in stato critico. 
-            Completare le procedure di emergenza per ripristinare i sistemi.
+          <p className="text-xs font-mono">
+            <span className="text-destructive font-bold animate-pulse">⚠️ CRITICAL ERROR:</span> Server EDEN offline. 
+            Seguire le procedure di ripristino manuale.
           </p>
         </RetroPanel>
 
-        {/* Progress indicator */}
-        <RetroPanel header="📊 Stato Procedure">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {(['wire', 'image', 'crossword'] as const).map((p, idx) => {
-              const isActive = phase === p;
-              const isCompleted = (['wire', 'image', 'crossword'].indexOf(phase) > idx) || phase === 'complete';
-              
-              return (
-                <div
-                  key={p}
-                  className={`
-                    retro-panel-inset px-4 py-2 text-[11px]
-                    ${isActive ? 'border-2 border-primary' : ''}
-                  `}
-                >
-                  <span className={isCompleted ? 'text-[hsl(var(--status-online))]' : isActive ? 'text-primary font-bold' : 'text-muted-foreground'}>
-                    {idx + 1}. {p === 'wire' ? 'WIRE PUZZLE' : p === 'image' ? 'IMAGE ANALYZER' : 'CROSSWORD'}
-                    {isCompleted && ' ✓'}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </RetroPanel>
+        {/* Progress Bar */}
+        <div className="flex justify-between items-center px-4 py-2 bg-black/40 border border-green-900/30 rounded font-mono text-[10px]">
+           {['CABLAGGIO', 'ANALISI SPETTRALE', 'DECODIFICA'].map((label, idx) => {
+             const phases = ['wire', 'image', 'crossword', 'complete'];
+             const currentIdx = phases.indexOf(phase);
+             const isActive = currentIdx === idx;
+             const isDone = currentIdx > idx;
+             
+             return (
+               <div key={label} className={`flex items-center gap-2 ${isActive ? 'text-green-400 font-bold' : isDone ? 'text-green-700' : 'text-gray-700'}`}>
+                 <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-green-500 animate-pulse' : isDone ? 'bg-green-700' : 'bg-gray-800'}`} />
+                 {label}
+               </div>
+             )
+           })}
+        </div>
 
-        {/* Game content */}
+        {/* Game Content */}
         {phase === 'intro' && (
-          <RetroPanel header="⏳ Inizializzazione Sistema">
-            <div className="retro-panel-inset p-4 bg-[hsl(220,30%,8%)] min-h-[200px]">
-              <div className="space-y-1 font-mono text-[11px]">
+          <RetroPanel header="System Boot">
+            <div className="retro-panel-inset p-6 bg-black min-h-[300px] flex flex-col justify-end">
+              <div className="space-y-2 font-mono text-xs">
                 {introTexts.slice(0, introStep).map((text, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`
-                      ${text.includes('ATTENZIONE') || text.includes('CRITICO') ? 'text-destructive' : 'text-[hsl(120,100%,50%)]'}
-                      ${text.includes('tremolano') ? 'animate-pulse' : ''}
-                    `}
-                  >
+                  <div key={idx} className={`${text.includes('ATTENZIONE') || text.includes('CRITICO') ? 'text-red-500' : 'text-green-500'}`}>
                     {text}
                   </div>
                 ))}
-                {introStep < introTexts.length && (
-                  <span className="text-[hsl(120,100%,50%)] animate-pulse">█</span>
-                )}
+                {introStep < introTexts.length && <span className="text-green-500 animate-pulse">_</span>}
               </div>
             </div>
           </RetroPanel>
         )}
 
         {phase === 'wire' && (
-          <RetroPanel header="🔌 Fase 1: Sequence Wire Puzzle">
-            <p className="text-[10px] text-muted-foreground mb-3">
-              Riordina i fili nel pannello elettrico per stabilizzare l'alimentazione del server EDEN.
-            </p>
+          <RetroPanel header="Fase 1: Patch Bay Reconnection">
             <WirePuzzle onSuccess={handleWireSuccess} />
           </RetroPanel>
         )}
 
         {phase === 'image' && (
-          <RetroPanel header="🔍 Fase 2: Image Code Analyzer">
-            <p className="text-[10px] text-muted-foreground mb-3">
-              Analizza le immagini corrotte per estrarre i codici di accesso nascosti.
-            </p>
+          <RetroPanel header="Fase 2: Spectral Image Forensics">
             <ImageAnalyzer onSuccess={handleImageSuccess} />
           </RetroPanel>
         )}
 
         {phase === 'crossword' && (
-          <RetroPanel header="🧩 Fase 3: Crossword Decoder">
-            <p className="text-[10px] text-muted-foreground mb-3">
-              Risolvi il cruciverba per ottenere la password finale di ripristino.
-            </p>
+          <RetroPanel header="Fase 3: Override Protocol">
             <CrosswordPuzzle onSuccess={handleCrosswordSuccess} />
           </RetroPanel>
         )}
 
         {phase === 'complete' && (
-          <RetroPanel header="✅ Ripristino Completato">
-            <div className="text-center py-8">
-              <div className="text-4xl mb-4">🖥️</div>
-              <h2 className="text-lg font-bold text-[hsl(var(--status-online))] mb-4">
-                SERVER EDEN ONLINE
+          <RetroPanel header="System Restore Complete">
+            <div className="text-center py-12 space-y-6">
+              <div className="text-6xl animate-bounce">💾</div>
+              <h2 className="text-2xl font-bold text-green-500 font-mono tracking-widest">
+                SYSTEM ONLINE
               </h2>
-              <p className="text-[11px] mb-4">
-                Tutti i sistemi sono stati ripristinati con successo.
-              </p>
-              <div className="retro-panel-inset p-4 mb-4 text-left max-w-md mx-auto">
-                <p className="text-[10px] font-mono text-[hsl(var(--status-online))]">
-                  PASSWORD FINALE: TARNISHED<br/>
-                  OPERATORE: Lorenzo Tagliaferri (CTO)<br/>
-                  TIMESTAMP: {new Date().toISOString()}<br/>
-                  STATUS: SYSTEM RESTORED
-                </p>
+              <div className="retro-panel-inset p-6 max-w-md mx-auto bg-black text-left font-mono text-xs text-green-400 space-y-2">
+                <p>STATUS: NORMAL</p>
+                <p>PASSWORD: TARNISHED</p>
+                <p>UPTIME: 00:00:01</p>
+                <p className="text-white pt-4">Benvenuto, Lorenzo.</p>
               </div>
               <RetroButton onClick={() => navigate('/')}>
-                Torna alla Home
+                TORNA ALLA DASHBOARD
               </RetroButton>
             </div>
           </RetroPanel>
         )}
-
-        {/* Footer info */}
-        <RetroPanel header="ℹ️ Informazioni Sistema">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-[10px]">
-            <div className="retro-panel-inset p-2">
-              <div className="font-bold">Piano</div>
-              <div className="text-muted-foreground">-1</div>
-            </div>
-            <div className="retro-panel-inset p-2">
-              <div className="font-bold">Temperatura</div>
-              <div className="text-muted-foreground">18°C</div>
-            </div>
-            <div className="retro-panel-inset p-2">
-              <div className="font-bold">UPS</div>
-              <div className="text-[hsl(var(--status-warning))]">87%</div>
-            </div>
-            <div className="retro-panel-inset p-2">
-              <div className="font-bold">Power</div>
-              <div className="text-destructive animate-pulse">BACKUP</div>
-            </div>
-          </div>
-        </RetroPanel>
       </div>
     </RetroLayout>
   );

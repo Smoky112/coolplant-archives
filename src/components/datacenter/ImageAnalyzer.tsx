@@ -1,228 +1,164 @@
 import { useState } from 'react';
 
+// IMPORTANTE: Assicurati che questi file esistano in queste posizioni o spostateli in public/
+// Se usi Vite/CreateReactApp, le immagini in src devono essere importate.
+// Se hai problemi di path, sposta i file in /public/img/ e usa stringhe semplici.
+import sourceImage from '../File audio/img/Imagine_Uffico_sangue.jpeg'; 
+import audioFile from '../File audio/img/Audio_Ufficio_sangue_spettrogramma.bmp.wav';
+
 interface ImageAnalyzerProps {
   onSuccess: () => void;
 }
 
-const IMAGES = [
-  { id: 1, hiddenCode: '7', hint: 'Aumenta il contrasto per vedere il primo numero' },
-  { id: 2, hiddenCode: '3', hint: 'Riduci la luminosità e aumenta la saturazione' },
-  { id: 3, hiddenCode: '8', hint: 'Inverti i colori mentalmente - contrasto massimo' },
-  { id: 4, hiddenCode: '2', hint: 'Il numero è nascosto nel rumore - aumenta tutto' },
-  { id: 5, hiddenCode: 'SPETTROGRAMMA', hint: 'Scarica e analizza con un tool audio esterno...', isDownloadable: true },
-];
-
 export const ImageAnalyzer = ({ onSuccess }: ImageAnalyzerProps) => {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [brightness, setBrightness] = useState(100);
-  const [contrast, setContrast] = useState(100);
-  const [saturate, setSaturate] = useState(100);
-  const [foundCodes, setFoundCodes] = useState<string[]>([]);
+  const [filters, setFilters] = useState({
+    brightness: 100,
+    contrast: 100,
+    saturate: 100,
+    invert: 0
+  });
+  
   const [inputCode, setInputCode] = useState('');
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showDownload, setShowDownload] = useState(false);
 
-  const currentImage = IMAGES[selectedImage];
-  const filterStyle = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturate}%)`;
-  const FINAL_CODE = '7382';
+  // Logica "Sweet Spot": il codice si vede solo con questi parametri
+  // Contrasto Alto (>150), Luminosità Bassa (<80), Inversione Alta (>80)
+  const isRevealed = 
+    filters.contrast > 150 && 
+    filters.brightness < 80 &&
+    filters.invert > 80;
 
-  const handleCodeSubmit = () => {
-    if (inputCode.toUpperCase() === FINAL_CODE) {
-      setShowSuccess(true);
-      setTimeout(() => onSuccess(), 2000);
+  const handleSlider = (name: string, val: number) => {
+    setFilters(prev => ({ ...prev, [name]: val }));
+  };
+
+  const handleSubmit = () => {
+    if (inputCode === '7382') {
+      setShowDownload(true);
     }
   };
 
-  const handleFoundCode = (code: string) => {
-    if (!foundCodes.includes(code)) {
-      setFoundCodes([...foundCodes, code]);
-    }
-  };
-
-  const generateNoisePattern = (id: number) => {
-    const patterns: Record<number, JSX.Element> = {
-      1: (
-        <svg viewBox="0 0 200 150" className="w-full h-full">
-          <rect width="200" height="150" fill="#111" />
-          {[...Array(100)].map((_, i) => (
-            <rect key={i} x={Math.random() * 200} y={Math.random() * 150} width={2 + Math.random() * 4} height={2 + Math.random() * 4}
-              fill={`rgba(${Math.random() * 50}, ${Math.random() * 100}, ${Math.random() * 50}, ${Math.random()})`} />
-          ))}
-          <text x="100" y="80" textAnchor="middle" fill="#1a1a1a" fontSize="60" fontFamily="monospace">7</text>
-        </svg>
-      ),
-      2: (
-        <svg viewBox="0 0 200 150" className="w-full h-full">
-          <rect width="200" height="150" fill="#fff" />
-          {[...Array(80)].map((_, i) => (
-            <line key={i} x1={Math.random() * 200} y1={Math.random() * 150} x2={Math.random() * 200} y2={Math.random() * 150}
-              stroke={`rgba(200, 200, 200, ${Math.random()})`} strokeWidth={1} />
-          ))}
-          <text x="100" y="85" textAnchor="middle" fill="#fafafa" fontSize="55" fontFamily="monospace">3</text>
-        </svg>
-      ),
-      3: (
-        <svg viewBox="0 0 200 150" className="w-full h-full">
-          <rect width="200" height="150" fill="#0a0a0a" />
-          {[...Array(150)].map((_, i) => (
-            <circle key={i} cx={Math.random() * 200} cy={Math.random() * 150} r={1 + Math.random() * 3}
-              fill={`hsl(${120 + Math.random() * 60}, 100%, ${20 + Math.random() * 30}%)`} />
-          ))}
-          <text x="100" y="85" textAnchor="middle" fill="#0f0f0f" fontSize="50" fontFamily="monospace">8</text>
-        </svg>
-      ),
-      4: (
-        <svg viewBox="0 0 200 150" className="w-full h-full">
-          <rect width="200" height="150" fill="#1a1a1a" />
-          {[...Array(200)].map((_, i) => (
-            <rect key={i} x={Math.random() * 200} y={Math.random() * 150} width={1} height={1}
-              fill={Math.random() > 0.5 ? '#222' : '#111'} />
-          ))}
-          <text x="100" y="85" textAnchor="middle" fill="#1f1f1f" fontSize="55" fontFamily="monospace">2</text>
-        </svg>
-      ),
-      5: (
-        <svg viewBox="0 0 200 150" className="w-full h-full">
-          <rect width="200" height="150" fill="#000" />
-          {[...Array(200)].map((_, i) => (
-            <rect key={i} x={(i % 40) * 5} y={0} width={3} height={20 + Math.sin(i * 0.3) * 50 + Math.random() * 30}
-              fill={`hsl(${280 + Math.random() * 40}, 70%, ${30 + Math.random() * 30}%)`} />
-          ))}
-          <text x="100" y="130" textAnchor="middle" fill="#333" fontSize="12" fontFamily="monospace">AUDIO_SPETTROGRAMMA.wav</text>
-        </svg>
-      ),
-    };
-    return patterns[id];
-  };
-
-  if (showSuccess) {
+  if (showDownload) {
     return (
-      <div className="text-center py-8">
-        <div className="text-[hsl(var(--status-online))] text-lg animate-pulse mb-4">✓ CODICE ACCETTATO</div>
-        <div className="text-[hsl(120,100%,40%)] text-[11px]">Sequenza decrittata: {FINAL_CODE}</div>
-        <div className="text-[9px] text-muted-foreground mt-4">Accesso al livello successivo...</div>
+      <div className="retro-panel-inset p-8 flex flex-col items-center justify-center space-y-6 bg-black">
+        <div className="text-green-500 text-lg font-mono animate-pulse">
+          ✓ SEQUENZA DECIFRATA
+        </div>
+        <div className="text-xs text-gray-400 font-mono text-center max-w-sm">
+          Il sistema ha isolato un artefatto audio nascosto nei metadata dell'immagine.
+        </div>
+        
+        <div className="p-6 border border-green-800 bg-green-900/10 rounded flex flex-col items-center gap-4 w-full max-w-sm">
+          <span className="text-4xl">🔊</span>
+          <span className="font-mono text-xs text-green-300">Audio_Ufficio_sangue_spettrogramma.bmp.wav</span>
+          
+          <a 
+            href={audioFile}
+            download="EVIDENCE_AUDIO.wav"
+            onClick={() => setTimeout(onSuccess, 3000)}
+            className="retro-button w-full flex justify-center items-center gap-2 text-xs"
+          >
+            💾 ESTRAI FILE AUDIO
+          </a>
+        </div>
+        <div className="text-[10px] text-red-400 font-mono mt-4">
+          NOTA: Analizzare lo spettrogramma del file audio per procedere.
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="retro-panel-inset p-4 bg-[hsl(220,30%,8%)]">
-        {/* Header */}
-        <div className="border-b border-[hsl(120,50%,30%)] pb-2 mb-4 font-mono text-[10px]">
-          <div className="text-center text-[hsl(120,100%,50%)]">╔══ IMAGE CODE ANALYZER v2.1 ══╗</div>
-          <div className="text-center text-[hsl(var(--status-warning))] mt-1">
-            Analizza le immagini per trovare i codici nascosti
-          </div>
-        </div>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
+        
+        {/* Viewer */}
+        <div className="flex-1 relative border border-green-900 bg-black h-[300px] overflow-hidden group">
+          {/* Immagine Base */}
+          <img 
+            src={sourceImage}
+            alt="Evidence" 
+            className="w-full h-full object-contain transition-all duration-200"
+            style={{
+              filter: `
+                brightness(${filters.brightness}%) 
+                contrast(${filters.contrast}%) 
+                saturate(${filters.saturate}%)
+                invert(${filters.invert}%)
+              `
+            }}
+          />
 
-        {/* Image tabs */}
-        <div className="flex gap-2 mb-4 flex-wrap">
-          {IMAGES.map((img, idx) => (
-            <button
-              key={img.id}
-              onClick={() => {
-                setSelectedImage(idx);
-                setBrightness(100);
-                setContrast(100);
-                setSaturate(100);
-              }}
-              className={`
-                px-3 py-1 border text-[10px] font-mono transition-all
-                ${selectedImage === idx 
-                  ? 'border-[hsl(120,100%,50%)] bg-[hsl(120,100%,50%)/0.2] text-[hsl(120,100%,50%)]' 
-                  : 'border-[hsl(120,50%,30%)] text-[hsl(120,50%,50%)] hover:border-[hsl(120,100%,50%)]'}
-                ${foundCodes.includes(img.hiddenCode) ? 'text-[hsl(var(--status-online))]' : ''}
-              `}
-            >
-              IMG-{img.id} {foundCodes.includes(img.hiddenCode) && '✓'}
-            </button>
-          ))}
-        </div>
-
-        {/* Image display */}
-        <div className="border border-[hsl(120,50%,30%)] bg-black p-2 mb-4">
-          <div className="w-full h-40 flex items-center justify-center overflow-hidden" style={{ filter: filterStyle }}>
-            {generateNoisePattern(currentImage.id)}
+          {/* Layer Codice Nascosto (Steganografia simulata) */}
+          <div 
+            className="absolute inset-0 flex items-center justify-center pointer-events-none mix-blend-difference"
+            style={{
+              opacity: isRevealed ? 0.9 : 0,
+              transition: 'opacity 0.3s ease'
+            }}
+          >
+            <span className="text-6xl font-mono font-bold text-white tracking-[1rem] blur-[1px]">
+              7382
+            </span>
           </div>
+
+          {/* Overlay Noise */}
+          <div className="absolute inset-0 bg-repeat opacity-10 pointer-events-none" style={{ backgroundImage: 'url("data:image/svg+xml,...")' }}></div>
         </div>
 
         {/* Controls */}
-        <div className="grid grid-cols-3 gap-4 mb-4">
-          <div>
-            <label className="text-[9px] text-[hsl(120,50%,40%)] block mb-1 font-mono">BRIGHTNESS</label>
-            <input type="range" min="0" max="300" value={brightness} onChange={(e) => setBrightness(Number(e.target.value))}
-              className="w-full accent-[hsl(120,100%,50%)]" />
-            <span className="text-[9px] text-[hsl(120,100%,50%)] font-mono">{brightness}%</span>
-          </div>
-          <div>
-            <label className="text-[9px] text-[hsl(120,50%,40%)] block mb-1 font-mono">CONTRAST</label>
-            <input type="range" min="0" max="300" value={contrast} onChange={(e) => setContrast(Number(e.target.value))}
-              className="w-full accent-[hsl(120,100%,50%)]" />
-            <span className="text-[9px] text-[hsl(120,100%,50%)] font-mono">{contrast}%</span>
-          </div>
-          <div>
-            <label className="text-[9px] text-[hsl(120,50%,40%)] block mb-1 font-mono">SATURATE</label>
-            <input type="range" min="0" max="300" value={saturate} onChange={(e) => setSaturate(Number(e.target.value))}
-              className="w-full accent-[hsl(120,100%,50%)]" />
-            <span className="text-[9px] text-[hsl(120,100%,50%)] font-mono">{saturate}%</span>
-          </div>
-        </div>
-
-        {/* Hint */}
-        <div className="text-[9px] text-[hsl(var(--status-warning))] mb-4 p-2 border border-[hsl(var(--status-warning)/0.3)] font-mono">
-          💡 HINT: {currentImage.hint}
-        </div>
-
-        {/* Download button for image 5 */}
-        {currentImage.isDownloadable && (
-          <div className="mb-4">
-            <a
-              href="/src/components/File audio/img/Audio_Ufficio_sangue_spettrogramma.bmp.wav"
-              download="EDEN_AUDIO_FRAGMENT.wav"
-              className="retro-button inline-block text-[10px]"
-            >
-              📥 DOWNLOAD FILE AUDIO
-            </a>
-            <div className="text-[9px] text-destructive mt-1">
-              ⚠️ Richiede analisi esterna (spettrogramma audio)
+        <div className="w-full md:w-48 space-y-4 bg-[#050505] p-4 border border-green-900/50">
+          <h3 className="text-xs font-mono text-green-500 mb-2 border-b border-green-900 pb-1">FILTRI IMMAGINE</h3>
+          
+          {[
+            { id: 'brightness', label: 'LUMINOSITÀ', max: 200 },
+            { id: 'contrast', label: 'CONTRASTO', max: 200 },
+            { id: 'saturate', label: 'SATURAZIONE', max: 200 },
+            { id: 'invert', label: 'INVERSIONE', max: 100 },
+          ].map(ctrl => (
+            <div key={ctrl.id} className="space-y-1">
+              <div className="flex justify-between text-[9px] font-mono text-gray-400">
+                <span>{ctrl.label}</span>
+                <span>{filters[ctrl.id as keyof typeof filters]}%</span>
+              </div>
+              <input 
+                type="range" 
+                min="0" max={ctrl.max} 
+                value={filters[ctrl.id as keyof typeof filters]}
+                onChange={(e) => handleSlider(ctrl.id, Number(e.target.value))}
+                className="w-full h-1 bg-gray-800 rounded-none appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-green-500"
+              />
             </div>
-          </div>
-        )}
-
-        {/* Code input */}
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            placeholder="Codice trovato..."
-            value={inputCode}
-            onChange={(e) => setInputCode(e.target.value)}
-            className="flex-1 retro-input bg-[hsl(220,30%,5%)] text-[hsl(120,100%,50%)] font-mono"
-            onKeyDown={(e) => { if (e.key === 'Enter') handleCodeSubmit(); }}
-          />
-          <button onClick={() => { if (inputCode && !foundCodes.includes(inputCode)) handleFoundCode(inputCode); }}
-            className="retro-button text-[10px]">MARK</button>
-          <button onClick={handleCodeSubmit} className="retro-button text-[10px]">SUBMIT</button>
-        </div>
-
-        {/* Found codes */}
-        <div className="border-t border-[hsl(120,50%,30%)] pt-2 font-mono">
-          <div className="text-[9px] text-[hsl(120,50%,40%)] mb-1">CODICI TROVATI:</div>
-          <div className="flex gap-2 flex-wrap">
-            {foundCodes.length === 0 ? (
-              <span className="text-[9px] text-muted-foreground">Nessun codice registrato</span>
-            ) : (
-              foundCodes.map((code, idx) => (
-                <span key={idx} className="px-2 py-1 bg-[hsl(120,100%,50%)/0.2] border border-[hsl(120,50%,30%)] text-[9px] text-[hsl(120,100%,50%)]">
-                  {code}
-                </span>
-              ))
-            )}
-          </div>
-          <div className="text-[9px] text-[hsl(var(--status-warning))] mt-2">
-            Inserisci la sequenza completa dei 4 numeri per procedere
-          </div>
+          ))}
         </div>
       </div>
+
+      {/* Input Area */}
+      <div className="flex items-end gap-2 border-t border-green-900/30 pt-4">
+        <div className="flex-1">
+          <label className="text-[10px] font-mono text-green-600 block mb-1">CODICE RILEVATO:</label>
+          <input 
+            type="text" 
+            maxLength={4}
+            value={inputCode}
+            onChange={(e) => setInputCode(e.target.value)}
+            placeholder="_ _ _ _"
+            className="w-full bg-black border border-green-700 text-green-400 font-mono text-xl p-2 tracking-widest text-center focus:outline-none focus:border-green-400"
+          />
+        </div>
+        <button 
+          onClick={handleSubmit}
+          className="retro-button h-[46px] px-6 text-xs"
+        >
+          DECODIFICA
+        </button>
+      </div>
+      
+      {isRevealed && (
+        <div className="text-[10px] text-green-400 text-center animate-pulse font-mono">
+          [!] LIVELLO STEGANOGRAFICO RILEVATO
+        </div>
+      )}
     </div>
   );
 };
